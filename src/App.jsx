@@ -1,39 +1,35 @@
-import { useState, useEffect } from 'react';
-import Telegram from '@twa-dev/sdk';
-import products from './products'; // импортируем список
-import ProductCard from "./components/ProductCard.jsx"; // добавили
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import ProductCarousel from './components/ProductCarousel';
+
+const productLines = [
+  'Chai-Latte', 'Chocolate', 'Cordial', 'Cream-Latte', 'Frappe', 'Garnish', 'Iced-Tea',
+  'Jam', 'Matcha', 'Milkshake', 'Raf', 'Sugar-Free', 'Sugar-Syrup',
+  'Tea', 'Topping', 'Vending'
+];
 
 function App() {
-  useEffect(() => {
-    Telegram.ready();
-    Telegram.MainButton.setText("Add to Cart");
-    Telegram.MainButton.show();
-  }, []);
-
   return (
-    <div style={{
-      padding: '40px',
-      fontFamily: 'sans-serif',
-      textAlign: 'center'
-    }}>
-      <h1>Welcome to The Base 🧋</h1>
-      <p>Your Telegram Mini App is running!</p>
-      {products.map((product) => (
-  <ProductCard
-    key={product.id}
-    title={product.title}
-    description={product.description}
-    price={product.price}
-  />
-))}
-
-      <ProductCard 
-        title="Matcha Cream Base" 
-        description="Premium matcha blend for drinks & desserts" 
-        price={35}
-      />
-    </div>
+    <Router>
+      <div className="bg-black text-white min-h-screen p-4">
+        <Routes>
+          <Route path="/" element={
+            <div className="grid grid-cols-2 gap-4">
+              {productLines.map((line) => (
+                <Link
+                  key={line}
+                  to={`/${line}`}
+                  className="bg-white text-black p-4 rounded-xl text-center text-sm font-medium hover:bg-gray-200 transition"
+                >
+                  {line.replace(/-/g, ' ')}
+                </Link>
+              ))}
+            </div>
+          } />
+          <Route path="/:line" element={<ProductCarousel />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
