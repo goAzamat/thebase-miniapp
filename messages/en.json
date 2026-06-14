@@ -63,6 +63,40 @@
     "inStock": "in stock",
     "toOrder": "to order"
   },
+  "labNav": {
+    "briefs": "Briefs",
+    "formulas": "Formulas",
+    "ingredients": "Ingredients"
+  },
+  "labDetail": {
+    "back": "Back to formulas",
+    "recipeCost": "Recipe cost",
+    "odooCost": "Odoo cost",
+    "salePrice": "Sale price",
+    "inStock": "in stock",
+    "outOfStock": "out of stock",
+    "note": "“Recipe cost” counts ingredients only; “Odoo cost” also includes packaging and overhead.",
+    "composition": "Composition",
+    "cheaper": "cheaper in stock:",
+    "notFound": "Formula not found.",
+    "loading": "Loading…",
+    "error": "Could not load this formula."
+  },
+  "labIngredients": {
+    "title": "Ingredients",
+    "subtitle": "Raw-material catalog with live cost and stock from Odoo",
+    "searchPlaceholder": "Search name or code…",
+    "inStockOnly": "In stock only",
+    "count": "{count, plural, =0 {No items} one {# item} other {# items}}",
+    "loading": "Loading ingredients…",
+    "empty": "No raw materials found.",
+    "error": "Could not load ingredients from Odoo.",
+    "code": "Code",
+    "ingredient": "Ingredient",
+    "type": "Type",
+    "cost": "Cost AED/kg",
+    "stock": "Stock kg"
+  },
   "sales": {
     "title": "Sales Pipeline",
     "subtitle": "Active opportunities from Odoo CRM",

@@ -4,14 +4,15 @@
  * React Query (Tier-B) hooks + key factory for the Lab module.
  */
 import { useQuery } from '@tanstack/react-query';
-import { getLabBriefs, getFormulas } from './server';
-import type { LabBrief, Formula } from './schema';
+import { getLabBriefs, getFormulas, getFormulaDetails, getIngredients } from './server';
+import type { LabBrief, Formula, FormulaDetail, Ingredient } from './schema';
 
 export const labKeys = {
   all: ['lab'] as const,
   briefs: () => [...labKeys.all, 'briefs'] as const,
   formulas: () => [...labKeys.all, 'formulas'] as const,
   formula: (id: number) => [...labKeys.all, 'formula', id] as const,
+  ingredients: () => [...labKeys.all, 'ingredients'] as const,
 };
 
 export function useLabBriefs() {
@@ -27,5 +28,22 @@ export function useFormulas() {
     queryKey: labKeys.formulas(),
     queryFn: () => getFormulas(),
     staleTime: 900_000, // 15 min — matches the formulas server TTL
+  });
+}
+
+export function useFormulaDetail(id: number) {
+  return useQuery<FormulaDetail | null>({
+    queryKey: labKeys.formula(id),
+    queryFn: () => getFormulaDetails(id),
+    staleTime: 900_000,
+    enabled: Number.isFinite(id) && id > 0,
+  });
+}
+
+export function useIngredients() {
+  return useQuery<Ingredient[]>({
+    queryKey: labKeys.ingredients(),
+    queryFn: () => getIngredients(),
+    staleTime: 900_000,
   });
 }

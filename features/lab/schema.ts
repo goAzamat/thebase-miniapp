@@ -159,3 +159,195 @@ export function buildFormulas(
   out.sort((a, b) => a.name.localeCompare(b.name));
   return out;
 }
+
+/* -------------------------- FORMULA DETAIL -------------------------- */
+
+export interface RawProduct {
+  id: number;
+  name: string;
+  default_code: string | false;
+  standard_price: number;
+  categ_id: [number, string] | false;
+  qty_available: number;
+}
+
+export interface IngredientAlt {
+  name: string;
+  cost: number;
+}
+
+export interface IngredientLine {
+  id: number;
+  name: string;
+  type: string; // raw-material sub-category, e.g. "Flavour"
+  qty: number;
+  uom: string;
+  cost: number;
+  costPct: number; // share of total recipe cost
+  weightPct: number; // share of total batch weight
+  inStock: boolean;
+  alternatives: IngredientAlt[]; // cheaper, in-stock, same category
+}
+
+export interface FormulaDetail {
+  id: number;
+  code: string;
+  name: string;
+  category: string;
+  catalogCost: number;
+  recipeCost: number;
+  price: number;
+  stock: number;
+  inStock: boolean;
+  ingredients: IngredientLine[];
+}
+
+/** "Raw Material / Flavour Raw Material" → "Flavour". */
+export function rawSub(cat: string): string {
+  const parts = cat.split('/').map((s) => s.trim());
+  const s = parts[1] || 'Main';
+  return s.replace(/Raw Material/gi, '').replace(/-/g, '').trim() || 'Main';
+}
+
+/**
+ * Build the full ingredient breakdown for one formula, with per-ingredient
+ * cost/weight shares and cheaper same-category alternatives that are in stock.
+ * All heavy work stays server-side; the client receives a ready FormulaDetail.
+ */
+export function buildFormulaDetail(
+  finished: RawFinished,
+  lines: RawBomLine[],
+  raws: RawProduct[],
+  alts: RawProduct[],
+): FormulaDetail {
+  const rawById = new Map(raws.map((r) => [r.id, r]));
+
+  const altByCat = new Map<number, RawProduct[]>();
+  for (const a of alts) {
+    const c = a.categ_id ? a.categ_id[0] : null;
+    if (c == null) continue;
+    const arr = altByCat.get(c);
+    if (arr) arr.push(a);
+    else altByCat.set(c, [a]);
+  }
+
+  type Mid = {
+    pid: number | null;
+    raw?: RawProduct;
+    uom: string;
+    qty: number;
+    g: number;
+    cost: number;
+    catId: number | null;
+    cat: string;
+  };
+
+  let totalWeight = 0;
+  let totalCost = 0;
+
+  const mids: Mid[] = lines.map((l) => {
+    const pid = l.product_id ? l.product_id[0] : null;
+    const raw = pid != null ? rawById.get(pid) : undefined;
+    const uom = l.product_uom_id ? l.product_uom_id[1] : '';
+    const price = raw ? raw.standard_price : 0;
+    let g = 0;
+    let cost = 0;
+    if (uom === 'g') {
+      g = l.product_qty;
+      cost = (l.product_qty / 1000) * price;
+    } else if (uom === 'kg') {
+      g = l.product_qty * 1000;
+      cost = l.product_qty * price;
+    }
+    totalWeight += g;
+    totalCost += cost;
+    return {
+      pid,
+      raw,
+      uom,
+      qty: l.product_qty,
+      g,
+      cost,
+      catId: raw && raw.categ_id ? raw.categ_id[0] : null,
+      cat: raw && raw.categ_id ? raw.categ_id[1] : '',
+    };
+  });
+
+  const ingredients: IngredientLine[] = mids
+    .map((m) => {
+      const costPct = totalCost > 0 ? (m.cost / totalCost) * 100 : 0;
+      const weightPct = totalWeight > 0 ? (m.g / totalWeight) * 100 : 0;
+      const price = m.raw ? m.raw.standard_price : 0;
+
+      let alternatives: IngredientAlt[] = [];
+      if (m.catId != null && m.cost > 0) {
+        alternatives = (altByCat.get(m.catId) ?? [])
+          .filter((a) => a.id !== m.pid && a.standard_price < price)
+          .sort((x, y) => x.standard_price - y.standard_price)
+          .slice(0, 2)
+          .map((a) => ({ name: stripCode(a.name), cost: a.standard_price }));
+      }
+
+      return {
+        id: m.pid ?? 0,
+        name: m.raw ? stripCode(m.raw.name) : '—',
+        type: rawSub(m.cat),
+        qty: m.qty,
+        uom: m.uom,
+        cost: Math.round(m.cost * 1000) / 1000,
+        costPct,
+        weightPct,
+        inStock: m.raw ? m.raw.qty_available > 0 : false,
+        alternatives,
+      };
+    })
+    .sort((a, b) => b.cost - a.cost);
+
+  const categ = finished.categ_id ? finished.categ_id[1] : '';
+  return {
+    id: finished.id,
+    code: finished.default_code || '',
+    name: stripCode(finished.name),
+    category: categ.split('/').slice(1).join(' / ').trim() || 'Other',
+    catalogCost: finished.standard_price,
+    recipeCost: Math.round(totalCost * 1000) / 1000,
+    price: finished.list_price,
+    stock: finished.qty_available,
+    inStock: finished.qty_available > 0,
+    ingredients,
+  };
+}
+
+/* ----------------------------- INGREDIENTS ----------------------------- */
+
+export interface RawIngredient {
+  id: number;
+  default_code: string | false;
+  name: string;
+  standard_price: number;
+  categ_id: [number, string] | false;
+  qty_available: number;
+}
+
+export interface Ingredient {
+  id: number;
+  code: string;
+  name: string;
+  type: string; // raw-material sub-category, e.g. "Flavour"
+  cost: number; // AED / kg
+  stock: number; // kg
+  inStock: boolean;
+}
+
+export function mapIngredient(r: RawIngredient): Ingredient {
+  const cat = r.categ_id ? r.categ_id[1] : '';
+  return {
+    id: r.id,
+    code: r.default_code || '',
+    name: stripCode(r.name),
+    type: rawSub(cat),
+    cost: r.standard_price,
+    stock: r.qty_available,
+    inStock: r.qty_available > 0,
+  };
+}

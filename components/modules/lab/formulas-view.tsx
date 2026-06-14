@@ -9,6 +9,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Search, AlertCircle, FlaskConical } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
 import { useFormulas } from '@/features/lab/queries';
 import type { Formula } from '@/features/lab/schema';
 
@@ -18,7 +19,10 @@ const aed = (n: number) =>
 function FormulaCard({ f }: { f: Formula }) {
   const t = useTranslations('labFormulas');
   return (
-    <div className="relative rounded-xl border border-[#e7ded3] bg-white p-4 transition hover:border-[#cdbba6] hover:shadow-[0_6px_18px_rgba(0,0,0,0.05)]">
+    <Link
+      href={`/lab/formulas/${f.id}`}
+      className="relative block rounded-xl border border-[#e7ded3] bg-white p-4 transition hover:border-[#cdbba6] hover:shadow-[0_6px_18px_rgba(0,0,0,0.05)]"
+    >
       <span
         className={`absolute end-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
           f.inStock ? 'bg-[#e7f1eb] text-[#2f7d5b]' : 'bg-[#f6e4df] text-[#b5462f]'
@@ -47,7 +51,7 @@ function FormulaCard({ f }: { f: Formula }) {
           <div className="text-[10px] uppercase tracking-wide text-[#9a8a78]">{t('recipeCost')}</div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

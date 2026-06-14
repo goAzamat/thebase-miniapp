@@ -13,6 +13,7 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/config';
 import { can } from '@/lib/auth/rbac';
+import { LabNav } from '@/components/modules/lab/lab-nav';
 
 export default async function LabLayout({
   children,
@@ -30,7 +31,12 @@ export default async function LabLayout({
   }
 
   // The shared dashboard shell (sidebar/topbar) lives in
-  // app/[locale]/(dashboard)/layout.tsx. This layout only adds the guard
-  // (and, later, Lab-specific sub-navigation).
-  return <>{children}</>;
+  // app/[locale]/(dashboard)/layout.tsx. Here we add the Lab tab bar above
+  // every Lab page.
+  return (
+    <>
+      <LabNav />
+      {children}
+    </>
+  );
 }

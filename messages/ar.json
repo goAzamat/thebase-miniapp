@@ -63,6 +63,40 @@
     "inStock": "متوفر",
     "toOrder": "حسب الطلب"
   },
+  "labNav": {
+    "briefs": "الملخصات",
+    "formulas": "الصيغ",
+    "ingredients": "المكوّنات"
+  },
+  "labDetail": {
+    "back": "العودة إلى الصيغ",
+    "recipeCost": "تكلفة الوصفة",
+    "odooCost": "تكلفة Odoo",
+    "salePrice": "سعر البيع",
+    "inStock": "متوفر",
+    "outOfStock": "غير متوفر",
+    "note": "«تكلفة الوصفة» تحسب المكوّنات فقط؛ «تكلفة Odoo» تشمل أيضًا التعبئة والتكاليف غير المباشرة.",
+    "composition": "التركيب",
+    "cheaper": "أرخص ومتوفر:",
+    "notFound": "الصيغة غير موجودة.",
+    "loading": "جارٍ التحميل…",
+    "error": "تعذّر تحميل هذه الصيغة."
+  },
+  "labIngredients": {
+    "title": "المكوّنات",
+    "subtitle": "كتالوج المواد الخام مع التكلفة والمخزون الحي من Odoo",
+    "searchPlaceholder": "ابحث بالاسم أو الرمز…",
+    "inStockOnly": "المتوفر فقط",
+    "count": "{count, plural, =0 {لا عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصرًا} other {# عنصر}}",
+    "loading": "جارٍ تحميل المكوّنات…",
+    "empty": "لم يتم العثور على مواد خام.",
+    "error": "تعذّر تحميل المكوّنات من Odoo.",
+    "code": "الرمز",
+    "ingredient": "المكوّن",
+    "type": "النوع",
+    "cost": "التكلفة AED/كجم",
+    "stock": "المخزون كجم"
+  },
   "sales": {
     "title": "مسار المبيعات",
     "subtitle": "الفرص النشطة من Odoo CRM",
