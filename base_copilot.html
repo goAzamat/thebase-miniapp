@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE BASE — R&D Copilot</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root{ color-scheme: light;
+  --bg:#f6f2ec; --card:#ffffff; --ink:#1d1a17; --muted:#7a716a; --line:#e7ded3;
+  --accent:#9c6b43; --accent2:#2f5d50; --good:#2f7d5b; --warn:#b5462f; --chip:#f0e8dd;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:1.45}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:18px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:3px}
+.brand .logo{font-family:Georgia,serif;font-size:26px;letter-spacing:3px;font-weight:700}
+.brand .logo b{color:var(--accent)}
+.brand .sub{color:var(--muted);font-size:12.5px;letter-spacing:.3px}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--accent2);background:#e8f0ec;border:1px solid #cfe0d8;padding:4px 9px;border-radius:20px;font-weight:600}
+.live .dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi .n{font-size:25px;font-weight:700;font-family:Georgia,serif}
+.kpi .l{color:var(--muted);font-size:12px;margin-top:2px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+.tab{padding:9px 16px;cursor:pointer;border:none;background:none;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;font-weight:600}
+.tab.active{color:var(--ink);border-bottom-color:var(--accent)}
+.panel{display:none}
+.panel.active{display:block}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.controls input[type=text],.controls input[type=number],.controls select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink)}
+.controls input[type=text]{flex:1;min-width:180px}
+.controls label{font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:.12s;position:relative}
+.fcard:hover{border-color:var(--accent);box-shadow:0 6px 18px rgba(0,0,0,.06);transform:translateY(-1px)}
+.fcard .code{font-size:11px;color:var(--muted);letter-spacing:.5px}
+.fcard h3{font-size:15.5px;margin:3px 0 8px}
+.fcard .cat{display:inline-block;font-size:11px;background:var(--chip);color:#5d5147;padding:2px 8px;border-radius:20px;margin-bottom:10px}
+.metrics{display:flex;gap:14px;border-top:1px dashed var(--line);padding-top:9px}
+.metric .v{font-weight:700;font-size:15px}
+.metric .k{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.metric .v.margin{color:var(--good)}
+.badge-stock{position:absolute;top:12px;right:12px;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
+.in{background:#e7f1eb;color:var(--good)} .out{background:#f6e4df;color:var(--warn)}
+.muted{color:var(--muted)}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:9px 12px;text-align:left;font-size:13px;border-bottom:1px solid var(--line)}
+th{background:#f4ece1;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#6a5f54;user-select:none}
+tbody tr:hover{background:#faf6f0}
+.cost{font-variant-numeric:tabular-nums}
+.overlay{position:fixed;inset:0;background:rgba(20,16,12,.45);display:none;align-items:flex-start;justify-content:center;padding:34px 16px;z-index:50;overflow:auto}
+.overlay.open{display:flex}
+.modal{background:var(--bg);border-radius:16px;max-width:760px;width:100%;padding:0;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.modal .mhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.modal .mbody{padding:18px 22px}
+.x{cursor:pointer;border:none;background:var(--chip);width:32px;height:32px;border-radius:50%;font-size:16px;color:var(--ink);flex:none}
+.costbar{display:flex;gap:16px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.costbar .b .v{font-size:22px;font-weight:700;font-family:Georgia,serif}
+.costbar .b .k{font-size:11px;color:var(--muted)}
+.bd-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.bd-row .nm{font-size:13px}
+.bd-row .sub{font-size:11px;color:var(--muted)}
+.bd-bar{height:5px;border-radius:4px;background:var(--accent);margin-top:5px}
+.bd-row .qt{font-size:12px;color:var(--muted);text-align:right;min-width:64px}
+.bd-row .ct{font-weight:700;text-align:right;min-width:74px;font-variant-numeric:tabular-nums}
+.sub-alt{font-size:11.5px;color:var(--accent2);margin-top:3px}
+.loading{padding:60px;text-align:center;color:var(--muted)}
+.spinner{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{background:#f6e4df;border:1px solid #e3b9ac;color:var(--warn);padding:14px 16px;border-radius:10px;margin:10px 0}
+.chartbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;height:300px;position:relative}
+.note{font-size:12px;color:var(--muted);margin-top:6px}
+@media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}#dev-layout{grid-template-columns:1fr!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">THE <b>BASE</b></div>
+      <div class="sub">R&D Copilot — recipe development & cost engine</div>
+    </div>
+    <div class="live"><span class="dot"></span> Live Odoo data</div>
+  </header>
+
+  <div id="boot" class="loading"><div class="spinner"></div>Loading formulas and costs from Odoo…</div>
+  <div id="app" style="display:none">
+    <div class="kpis" id="kpis"></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="formulas">Formula finder</button>
+      <button class="tab" data-tab="develop">Develop</button>
+      <button class="tab" data-tab="ingredients">Ingredients</button>
+      <button class="tab" data-tab="analytics">Analytics</button>
+    </div>
+
+    <section class="panel active" id="panel-formulas">
+      <div class="controls">
+        <input type="text" id="f-search" placeholder="Search: name or code (e.g. matcha, karak, CC-003)">
+        <select id="f-cat"><option value="">All categories</option></select>
+        <label>max cost <input type="number" id="f-cost" style="width:80px" placeholder="AED"></label>
+        <label><input type="checkbox" id="f-sugar"> sugar-free</label>
+        <label><input type="checkbox" id="f-stock"> in stock</label>
+      </div>
+      <div class="note" id="f-count" style="margin-bottom:10px"></div>
+      <div class="grid" id="f-grid"></div>
+    </section>
+
+    <section class="panel" id="panel-develop">
+      <div style="display:grid;grid-template-columns:320px 1fr;gap:16px" id="dev-layout">
+        <div>
+          <div class="controls" style="display:block">
+            <h3 style="font-size:15px;margin-bottom:10px">Brief</h3>
+            <label style="display:block;margin-bottom:8px">Base (start point)
+              <select id="d-base" style="width:100%;margin-top:3px"></select></label>
+            <div style="display:flex;gap:8px;margin-bottom:8px">
+              <label style="flex:1">Batch yield, g<input type="number" id="d-batch" style="width:100%;margin-top:3px" value="500"></label>
+              <label style="flex:1">Serving, g<input type="number" id="d-serv" style="width:100%;margin-top:3px" value="20"></label>
+            </div>
+            <div style="margin-bottom:10px">
+              <label style="display:block">Target cost/serving, AED<input type="number" id="d-target" style="width:100%;margin-top:3px" step="0.1" placeholder="e.g. 1.5"></label>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Functional add-ins</div>
+            <div id="d-func" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Constraints</div>
+            <label style="display:block"><input type="checkbox" id="d-nosugar"> sugar-free (replace sugar with sweetener)</label>
+            <button id="d-build" style="margin-top:12px;width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px">Build recipe</button>
+          </div>
+        </div>
+        <div id="dev-work">
+          <div class="empty" id="dev-empty">Fill in the brief on the left and click “Build recipe” — the engine takes the nearest base from your library, applies add-ins, and computes cost and nutrition.</div>
+          <div id="dev-result" style="display:none"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-ingredients">
+      <div class="controls">
+        <input type="text" id="i-search" placeholder="Search ingredient (e.g. cocoa, mango, stevia)">
+        <select id="i-cat"><option value="">All raw types</option></select>
+        <label><input type="checkbox" id="i-stock"> in stock only</label>
+        <label>sort
+          <select id="i-sort">
+            <option value="name">by name</option>
+            <option value="cost-asc">cost ↑</option>
+            <option value="cost-desc">cost ↓</option>
+          </select>
+        </label>
+      </div>
+      <div class="note" id="i-count" style="margin-bottom:10px"></div>
+      <table id="i-table"><thead><tr>
+        <th>Code</th><th>Ingredient</th><th>Type</th>
+        <th>Cost, AED/kg</th><th>Stock, kg</th></tr></thead>
+        <tbody></tbody></table>
+    </section>
+
+    <section class="panel" id="panel-analytics">
+      <div class="chartbox"><canvas id="ch-cat"></canvas></div>
+      <div class="note">Live counts from Odoo — number of formulas in each category of your library.</div>
+    </section>
+  </div>
+
+  <div class="err" id="globerr" style="display:none"></div>
+</div>
+
+<div class="overlay" id="overlay"><div class="modal">
+  <div class="mhead">
+    <div><div class="muted" id="m-code" style="font-size:11px;letter-spacing:.5px"></div><h2 id="m-name" style="font-size:20px;margin-top:3px"></h2><div class="cat" id="m-cat" style="margin-top:8px"></div></div>
+    <button class="x" onclick="closeModal()">×</button>
+  </div>
+  <div class="mbody" id="m-body"></div>
+</div></div>
+
+<script>
+const ODOO='mcp__odoo__odoo_search_read';
+const AED=n=>(n==null||isNaN(n))?'—':n.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+const m2oId=v=>Array.isArray(v)?v[0]:null;
+const m2oName=v=>Array.isArray(v)?v[1]:'';
+const stripCode=s=>s.replace(/^\[[^\]]*\]\s*/,'').replace(/^\d+,\s*/,'').trim();
+
+let PRODUCTS={}, FORMULAS=[], RAWS=[], BOMByTmpl={}, charts={};
+
+const M2O=new Set(['categ_id','uom_id','product_id','product_tmpl_id','product_uom_id','bom_id']);
+const NUM=new Set(['id','standard_price','list_price','qty_available','product_qty']);
+function parseMd(md){
+  const lines=md.split('\n').filter(l=>l.trim().startsWith('|'));
+  if(lines.length<2) return [];
+  const head=lines[0].split('|').slice(1,-1).map(s=>s.trim());
+  const out=[];
+  for(let i=2;i<lines.length;i++){
+    const cells=lines[i].split('|').slice(1,-1).map(s=>s.trim());
+    if(cells.length<head.length) continue;
+    const o={};
+    head.forEach((h,j)=>{
+      let v=cells[j];
+      if(M2O.has(h)){
+        if(v==='False'||v===''){o[h]=false;}
+        else{const k=v.indexOf(',');o[h]=k>0?[parseInt(v.slice(0,k),10),v.slice(k+1).trim()]:v;}
+      } else if(NUM.has(h)){o[h]=(v==='False'||v==='')?0:parseFloat(v);}
+      else {o[h]=v==='False'?'':v;}
+    });
+    out.push(o);
+  }
+  return out;
+}
+async function odoo(model,fields,domain=[],limit=200,extra={}){
+  const r=await window.cowork.callMcpTool(ODOO,{params:{model,domain,fields,limit,response_format:'markdown',...extra}});
+  if(r.isError){let m='';try{m=r.content&&r.content[0]&&r.content[0].text?(' — '+r.content[0].text.slice(0,160)):''}catch(e){} throw new Error(model+m);}
+  let outer=r.structuredContent ?? JSON.parse(r.content[0].text);
+  let md=(outer && outer.result!==undefined)?outer.result:outer;
+  if(typeof md!=='string') throw new Error('Unexpected response format');
+  if(/^Error\b/i.test(md.trim())) throw new Error(md.trim().slice(0,150));
+  return parseMd(md);
+}
+async function odooPaged(model,fields,domain=[],page=180){
+  let all=[],off=0;
+  for(let i=0;i<60;i++){
+    const chunk=await odoo(model,fields,domain,page,{offset:off});
+    all=all.concat(chunk);
+    if(chunk.length<page) break;
+    off+=page;
+  }
+  return all;
+}
+
+function rawSub(cat){
+  const p=cat.split('/').map(s=>s.trim());
+  let s=p[1]||'Other'; return s.replace(/Raw Material/ig,'').replace(/-/g,'').trim()||'Main';
+}
+function finSub(cat){const p=cat.split('/').map(s=>s.trim());return p[1]||'Other';}
+
+async function boot(){
+  try{
+    const prods=await odooPaged('product.template',['default_code','name','standard_price','list_price','categ_id','qty_available','uom_id'],[['standard_price','>',0]],180);
+    const boms=await odooPaged('mrp.bom',['product_tmpl_id','product_qty','code'],[],180);
+    prods.forEach(p=>{PRODUCTS[p.id]=p;});
+    boms.forEach(b=>{const t=m2oId(b.product_tmpl_id); if(t!=null){ if(!BOMByTmpl[t]||b.id>BOMByTmpl[t].id) BOMByTmpl[t]=b; }});
+
+    const seen={};
+    prods.forEach(p=>{
+      const cat=m2oName(p.categ_id)||''; const code=p.default_code;
+      if(cat.startsWith('Finished Goods') && code && p.standard_price>0){
+        if(seen[code]) return; seen[code]=1;
+        const lp=p.list_price; const margin=(lp>2 && lp>p.standard_price)?(lp-p.standard_price)/lp*100:null;
+        FORMULAS.push({id:p.id,code,name:stripCode(p.name),cat,sub:finSub(cat),cost:p.standard_price,price:lp,margin,stock:p.qty_available,nosugar:/no added sugar|sugar free|no sugar|stevia/i.test(p.name+code+cat)});
+      } else if(cat.startsWith('Raw Material')){
+        if(p.standard_price>0) RAWS.push({id:p.id,code:code||'',name:stripCode(p.name),cat,sub:rawSub(cat),cost:p.standard_price,stock:p.qty_available});
+      }
+    });
+    FORMULAS.sort((a,b)=>a.name.localeCompare(b.name));
+    document.getElementById('boot').style.display='none';
+    document.getElementById('app').style.display='block';
+    renderKpis(); initFilters(); renderFormulas(); renderIngredients(); renderCharts(); initDev();
+  }catch(e){
+    document.getElementById('boot').style.display='none';
+    const g=document.getElementById('globerr'); g.style.display='block';
+    g.innerHTML='Could not load data from Odoo: '+e.message+'<br>Reopen the view or press “Reload” at the top of the panel.';
+  }
+}
+
+function renderKpis(){
+  const cats=new Set(FORMULAS.map(f=>f.sub)).size;
+  const low=RAWS.filter(r=>r.stock<=0).length;
+  const k=[['Formulas in library',FORMULAS.length],['Raw materials',RAWS.length],['Categories',cats],['Raw items to reorder',low]];
+  document.getElementById('kpis').innerHTML=k.map(x=>`<div class="kpi"><div class="n">${x[1]}</div><div class="l">${x[0]}</div></div>`).join('');
+}
+
+function initFilters(){
+  const cats=[...new Set(FORMULAS.map(f=>f.sub))].sort();
+  document.getElementById('f-cat').innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option>${c}</option>`).join('');
+  const rc=[...new Set(RAWS.map(r=>r.sub))].sort();
+  document.getElementById('i-cat').innerHTML='<option value="">All raw types</option>'+rc.map(c=>`<option>${c}</option>`).join('');
+  ['f-search','f-cat','f-cost','f-sugar','f-stock'].forEach(id=>document.getElementById(id).addEventListener('input',renderFormulas));
+  ['i-search','i-cat','i-stock','i-sort'].forEach(id=>document.getElementById(id).addEventListener('input',renderIngredients));
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active'); document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+  });
+}
+
+function renderFormulas(){
+  const q=document.getElementById('f-search').value.toLowerCase();
+  const cat=document.getElementById('f-cat').value;
+  const maxc=parseFloat(document.getElementById('f-cost').value);
+  const sugar=document.getElementById('f-sugar').checked;
+  const stock=document.getElementById('f-stock').checked;
+  let list=FORMULAS.filter(f=>{
+    if(q && !(f.name.toLowerCase().includes(q)||f.code.toLowerCase().includes(q))) return false;
+    if(cat && f.sub!==cat) return false;
+    if(!isNaN(maxc) && f.cost>maxc) return false;
+    if(sugar && !f.nosugar) return false;
+    if(stock && f.stock<=0) return false;
+    return true;
+  });
+  document.getElementById('f-count').textContent=list.length+' formulas';
+  const g=document.getElementById('f-grid');
+  if(!list.length){g.innerHTML='<div class="empty">Nothing matches these filters.</div>';return;}
+  g.innerHTML=list.map(f=>`<div class="fcard" onclick="openFormula(${f.id})">
+    <span class="badge-stock ${f.stock>0?'in':'out'}">${f.stock>0?'in stock':'to order'}</span>
+    <div class="code">${f.code}</div><h3>${f.name}</h3>
+    <span class="cat">${f.sub}</span>
+    <div class="metrics">
+      <div class="metric"><div class="v cost">${AED(f.cost)}</div><div class="k">cost AED</div></div>
+      <div class="metric"><div class="v cost">${AED(f.price)}</div><div class="k">price AED</div></div>
+    </div></div>`).join('');
+}
+
+function renderIngredients(){
+  const q=document.getElementById('i-search').value.toLowerCase();
+  const cat=document.getElementById('i-cat').value;
+  const stock=document.getElementById('i-stock').checked;
+  const sel=document.getElementById('i-sort').value;
+  let list=RAWS.filter(r=>{
+    if(q && !(r.name.toLowerCase().includes(q)||r.code.toLowerCase().includes(q))) return false;
+    if(cat && r.sub!==cat) return false;
+    if(stock && r.stock<=0) return false;
+    return true;
+  });
+  if(sel==='cost-asc')list.sort((a,b)=>a.cost-b.cost);
+  else if(sel==='cost-desc')list.sort((a,b)=>b.cost-a.cost);
+  else list.sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById('i-count').textContent=list.length+' raw materials';
+  document.querySelector('#i-table tbody').innerHTML=list.map(r=>`<tr>
+    <td class="muted">${r.code}</td><td>${r.name}</td><td><span class="cat">${r.sub}</span></td>
+    <td class="cost">${AED(r.cost)}</td>
+    <td class="cost" style="color:${r.stock>0?'var(--good)':'var(--warn)'}">${r.stock.toLocaleString('en',{maximumFractionDigits:1})}</td></tr>`).join('');
+}
+
+async function openFormula(id){
+  const f=FORMULAS.find(x=>x.id===id); if(!f)return;
+  document.getElementById('m-code').textContent=f.code;
+  document.getElementById('m-name').textContent=f.name;
+  document.getElementById('m-cat').textContent=f.sub;
+  const body=document.getElementById('m-body');
+  body.innerHTML='<div class="loading"><div class="spinner"></div>Computing recipe and cost…</div>';
+  document.getElementById('overlay').classList.add('open');
+  const bom=BOMByTmpl[id];
+  if(!bom){ body.innerHTML='<div class="err">No recipe (BoM) linked to this formula in Odoo. Catalog cost: <b>'+AED(f.cost)+' AED</b>.</div>'; return; }
+  try{
+    const lines=await odoo('mrp.bom.line',['product_id','product_qty','product_uom_id'],[['bom_id','=',bom.id]],200);
+    let rows=lines.map(l=>{
+      const pid=m2oId(l.product_id); const raw=PRODUCTS[pid];
+      const uom=m2oName(l.product_uom_id); const qty=l.product_qty;
+      const price=raw?raw.standard_price:0;
+      let cost=0; if(uom==='g')cost=qty/1000*price; else if(uom==='kg')cost=qty*price;
+      const cat=raw?m2oName(raw.categ_id):'';
+      return {pid,name:raw?stripCode(raw.name):stripCode(m2oName(l.product_id)),sub:cat.startsWith('Raw Material')?rawSub(cat):'—',qty,uom,cost,stock:raw?raw.qty_available:null,catfull:cat};
+    });
+    const total=rows.reduce((s,r)=>s+r.cost,0);
+    rows.sort((a,b)=>b.cost-a.cost);
+    const maxc=Math.max(...rows.map(r=>r.cost),0.0001);
+    let html=`<div class="costbar">
+      <div class="b"><div class="v">${AED(total)}</div><div class="k">recipe cost, AED</div></div>
+      <div class="b"><div class="v">${AED(f.cost)}</div><div class="k">Odoo cost, AED</div></div>
+      <div class="b"><div class="v">${AED(f.price)}</div><div class="k">sale price, AED</div></div>
+    </div>
+    <div class="note" style="margin:-8px 0 14px">“Recipe cost” = ingredients only. “Odoo cost” also includes packaging and factory overhead, so it is usually higher — the gap shows the weight of packaging + OH in the price.</div>
+    <h3 style="font-size:15px;margin-bottom:8px">Composition · ${rows.length} ingr. <span class="muted" style="font-weight:400;font-size:12px">(cost contribution, descending)</span></h3>`;
+    rows.forEach(r=>{
+      const pct=total>0?r.cost/total*100:0;
+      let alt='';
+      if(r.pid && r.cost>0){
+        const cur=PRODUCTS[r.pid];
+        const cand=RAWS.filter(x=>x.sub===r.sub && x.id!==r.pid && x.cost< (cur?cur.standard_price:1e9) && x.stock>0)
+                       .sort((a,b)=>a.cost-b.cost).slice(0,2);
+        if(cand.length) alt=`<div class="sub-alt">↳ cheaper, in stock: ${cand.map(c=>c.name+' ('+AED(c.cost)+'/kg)').join(', ')}</div>`;
+      }
+      const stockw=(r.stock!=null&&r.stock<=0)?' <span class="out badge-stock" style="position:static;display:inline-block">out of stock</span>':'';
+      html+=`<div class="bd-row">
+        <div><div class="nm">${r.name}${stockw}</div><div class="sub">${r.sub}</div>
+          <div class="bd-bar" style="width:${Math.max(4,r.cost/maxc*100)}%"></div>${alt}</div>
+        <div class="qt">${r.qty} ${r.uom}</div>
+        <div class="ct">${AED(r.cost)}<div class="sub" style="font-weight:400">${pct.toFixed(0)}%</div></div>
+      </div>`;
+    });
+    body.innerHTML=html;
+  }catch(e){ body.innerHTML='<div class="err">Could not load composition: '+e.message+'</div>'; }
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
+
+function renderCharts(){
+  const byCat={}; FORMULAS.forEach(f=>{byCat[f.sub]=(byCat[f.sub]||0)+1;});
+  const ce=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  charts.cat=new Chart(document.getElementById('ch-cat'),{type:'bar',data:{labels:ce.map(x=>x[0]),datasets:[{label:'Formulas',data:ce.map(x=>x[1]),backgroundColor:'#9c6b43'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{title:{display:true,text:'Formulas by category'},legend:{display:false}}}});
+}
+
+/* ===================== DEVELOP MODE ===================== */
+function nutFor(name){
+  const n=(name||'').toLowerCase();
+  const T=[
+   [/icing sugar|fine sugar|extra fine sugar|sucrose|sucrost|(^|[^o])sugar/,{kcal:400,p:0,f:0,c:100}],
+   [/fructose/,{kcal:400,p:0,f:0,c:100}],
+   [/dextrose|glucose syrup|dried glucose/,{kcal:380,p:0,f:0,c:95}],
+   [/maltodextrin/,{kcal:380,p:0,f:0,c:95}],
+   [/polydextrose/,{kcal:110,p:0,f:0,c:90}],
+   [/skim+ed milk|skim milk/,{kcal:360,p:35,f:1,c:52}],
+   [/whole cream milk|whole milk|full fat milk|milk powder/,{kcal:496,p:25,f:26,c:38}],
+   [/whey/,{kcal:360,p:12,f:1,c:75}],
+   [/non dairy creamer|creamer/,{kcal:520,p:2,f:30,c:60}],
+   [/cocoa/,{kcal:350,p:20,f:11,c:14}],
+   [/date/,{kcal:320,p:2,f:0,c:80}],
+   [/protein|fortivit/,{kcal:370,p:75,f:5,c:10}],
+   [/matcha|green tea powder|instant.*tea|black tea powder/,{kcal:300,p:25,f:5,c:40}],
+   [/coffee/,{kcal:350,p:14,f:0,c:40}],
+   [/coconut/,{kcal:600,p:6,f:60,c:24}],
+   [/freeze.?dried|fd powder|fruit powder|juice powder|yam|ube/,{kcal:340,p:3,f:1,c:80}],
+  ];
+  for(const [re,v] of T){ if(re.test(n)) return v; }
+  return {kcal:0,p:0,f:0,c:0};
+}
+function allergensOf(rows){
+  const t=new Set();
+  rows.forEach(r=>{const n=r.name.toLowerCase();
+    if(/skim|whole|milk powder|whey|full fat milk/.test(n)) t.add('Milk');
+    if(/pistachio|hazelnut|hazl|almond|amaretto|walnut|pecan/.test(n)) t.add('Tree nuts');
+    if(/oat|cereal|cookie|biscuit|gluten|wheat|barley|(^|[^o])malt(?!odextrin)/.test(n)) t.add('Gluten/cereals');
+    if(/soy|soya|lecithin/.test(n)) t.add('Soy');
+  });
+  return [...t];
+}
+const FUNCS=[
+  {key:'protein',label:'Protein',kw:/skim+ed milk|whey|protein/i,dose:30},
+  {key:'electro',label:'Electrolytes',kw:/fortivit|electrolyte|tripolyphosphate|trisodium/i,dose:1},
+  {key:'adapto',label:'Adaptogens',kw:/ashwagandha|ginseng|turmeric|licorice/i,dose:0.5},
+  {key:'vitc',label:'Vitamin C',kw:/amla|ascorbic/i,dose:0.5},
+  {key:'probio',label:'Probiotics',kw:/probiotic|bacillus/i,dose:0.2},
+  {key:'fiber',label:'Fiber',kw:/citrus fiber|fibre/i,dose:5},
+];
+let DEV={rows:[],baseName:'',prodName:''};
+function findRaw(re){ return RAWS.find(r=>re.test(r.name))||null; }
+
+function initDev(){
+  const bsel=document.getElementById('d-base');
+  bsel.innerHTML=FORMULAS.map(f=>`<option value="${f.id}">${f.name} — ${f.sub} (${AED(f.cost)} AED)</option>`).join('');
+  const fc=document.getElementById('d-func');
+  fc.innerHTML=FUNCS.map(fn=>{const raw=findRaw(fn.kw);const dis=raw?'':'disabled title="no raw material"';
+    return `<label class="cat" style="cursor:pointer"><input type="checkbox" id="d-fn-${fn.key}" ${dis}> ${fn.label}${raw?'':' ✕'}</label>`;}).join('');
+  document.getElementById('d-build').onclick=buildRecipe;
+}
+
+async function buildRecipe(){
+  const fid=parseInt(document.getElementById('d-base').value,10);
+  const f=FORMULAS.find(x=>x.id===fid); if(!f)return;
+  const work=document.getElementById('dev-result');
+  document.getElementById('dev-empty').style.display='none';
+  work.style.display='block';
+  work.innerHTML='<div class="loading"><div class="spinner"></div>Taking the base and building the recipe…</div>';
+  const bom=BOMByTmpl[fid];
+  let rows=[];
+  if(bom){
+    try{
+      const lines=await odoo('mrp.bom.line',['product_id','product_qty','product_uom_id'],[['bom_id','=',bom.id]],200);
+      lines.forEach(l=>{
+        const pid=m2oId(l.product_id); const raw=PRODUCTS[pid]; const uom=m2oName(l.product_uom_id);
+        let g=null; if(uom==='g')g=l.product_qty; else if(uom==='kg')g=l.product_qty*1000;
+        if(g==null||g<=0) return;
+        const cat=raw?m2oName(raw.categ_id):'';
+        rows.push({pid,name:raw?stripCode(raw.name):stripCode(m2oName(l.product_id)),sub:cat.startsWith('Raw Material')?rawSub(cat):'—',qty:g});
+      });
+    }catch(e){ work.innerHTML='<div class="err">Could not load base composition: '+e.message+'</div>'; return; }
+  }
+  if(document.getElementById('d-nosugar').checked){
+    rows=rows.filter(r=>!/sugar|fructose|dextrose|sucrost/i.test(r.name));
+    const stv=findRaw(/stevia|sucralose|acesulfame/i);
+    if(stv && !rows.some(r=>r.pid===stv.id)) rows.push({pid:stv.id,name:stv.name,sub:stv.sub,qty:1.5});
+  }
+  FUNCS.forEach(fn=>{
+    const cb=document.getElementById('d-fn-'+fn.key);
+    if(cb&&cb.checked){const raw=findRaw(fn.kw); if(raw&&!rows.some(r=>r.pid===raw.id)) rows.push({pid:raw.id,name:raw.name,sub:raw.sub,qty:fn.dose});}
+  });
+  DEV.rows=rows; DEV.baseName=f.name; DEV.prodName='NEW — '+f.name;
+  renderDev();
+}
+
+function priceOf(pid){const p=PRODUCTS[pid];return p?p.standard_price:0;}
+function devTotals(){
+  let batch=0,cost=0,kcal=0,pr=0,fa=0,ca=0;
+  DEV.rows.forEach(r=>{const price=priceOf(r.pid);const c=r.qty/1000*price;const nu=nutFor(r.name);
+    batch+=r.qty;cost+=c;kcal+=r.qty/100*nu.kcal;pr+=r.qty/100*nu.p;fa+=r.qty/100*nu.f;ca+=r.qty/100*nu.c;});
+  return {batch,cost,kcal,pr,fa,ca};
+}
+function renderDev(){
+  const serv=parseFloat(document.getElementById('d-serv').value)||20;
+  const target=parseFloat(document.getElementById('d-target').value);
+  const t=devTotals(); const b=t.batch||1;
+  const costServ=t.cost/b*serv;
+  const onTarget=!isNaN(target)?costServ<=target:null;
+  const per=(x)=>x/b*100, perS=(x)=>x/b*serv;
+  let html=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+    <input id="d-name" value="${DEV.prodName.replace(/"/g,'&quot;')}" style="font-size:18px;font-family:Georgia,serif;font-weight:600;border:none;border-bottom:1px solid var(--line);background:none;color:var(--ink);min-width:240px;flex:1">
+    <button onclick="genSpec()" style="padding:8px 14px;background:var(--accent2);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer">Spec sheet → PDF</button>
+  </div>
+  <div class="costbar">
+    <div class="b"><div class="v">${t.batch.toFixed(0)} g</div><div class="k">batch weight</div></div>
+    <div class="b"><div class="v">${AED(t.cost)}</div><div class="k">cost / batch</div></div>
+    <div class="b"><div class="v" style="color:${onTarget===null?'var(--ink)':onTarget?'var(--good)':'var(--warn)'}">${AED(costServ)}</div><div class="k">cost / serving ${onTarget===null?'':onTarget?'✓ on target':'✕ over'}</div></div>
+  </div>
+  <div class="costbar">
+    <div class="b"><div class="v">${t.kcal? (per(t.kcal)).toFixed(0):'0'}</div><div class="k">kcal / 100 g</div></div>
+    <div class="b"><div class="v">${per(t.pr).toFixed(1)}</div><div class="k">protein, g/100g</div></div>
+    <div class="b"><div class="v">${per(t.fa).toFixed(1)}</div><div class="k">fat, g/100g</div></div>
+    <div class="b"><div class="v">${per(t.ca).toFixed(1)}</div><div class="k">carbs, g/100g</div></div>
+    <div class="b"><div class="v">${perS(t.kcal).toFixed(0)}</div><div class="k">kcal / serving (${serv}g)</div></div>
+  </div>
+  <h3 style="font-size:15px;margin:6px 0 8px">Working recipe · ${DEV.rows.length} ingr. <span class="muted" style="font-weight:400;font-size:12px">(doses are editable)</span></h3>
+  <table><thead><tr><th>Ingredient</th><th>Type</th><th style="width:90px">Dose, g</th><th>Cost</th><th>% wt</th><th></th></tr></thead><tbody>`;
+  DEV.rows.slice().sort((a,b2)=>b2.qty-a.qty).forEach((r)=>{
+    const idx=DEV.rows.indexOf(r);const price=priceOf(r.pid);const c=r.qty/1000*price;const pct=t.batch?r.qty/t.batch*100:0;
+    html+=`<tr><td>${r.name}</td><td><span class="cat">${r.sub}</span></td>
+      <td><input type="number" value="${r.qty}" step="0.1" style="width:78px;padding:4px 6px;border:1px solid var(--line);border-radius:6px" onchange="editQty(${idx},this.value)"></td>
+      <td class="cost">${AED(c)}</td><td class="cost">${pct.toFixed(1)}%</td>
+      <td><button onclick="rmRow(${idx})" style="border:none;background:none;color:var(--warn);cursor:pointer;font-size:16px">×</button></td></tr>`;
+  });
+  html+=`</tbody></table>
+  <div class="controls" style="margin-top:12px">
+    <select id="d-add" style="flex:1;min-width:200px">${RAWS.slice().sort((a,b2)=>a.name.localeCompare(b2.name)).map(r=>`<option value="${r.id}">${r.name} — ${r.sub} (${AED(r.cost)}/kg)</option>`).join('')}</select>
+    <input type="number" id="d-add-q" placeholder="dose, g" value="5" step="0.1" style="width:100px">
+    <button onclick="addRow()" style="padding:8px 14px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer">+ ingredient</button>
+  </div>
+  <div class="note">Nutrition is an estimate from an internal nutrient table (sugar, cocoa, milk/whey, creamer, maltodextrin, protein, etc.); flavours, colours, acids and extracts in micro-doses count as ≈0. Final values are confirmed by the lab. Cost here is ingredients only — excludes packaging and overhead.</div>`;
+  document.getElementById('dev-result').innerHTML=html;
+  document.getElementById('d-name').addEventListener('input',e=>{DEV.prodName=e.target.value;});
+}
+function editQty(i,v){DEV.rows[i].qty=parseFloat(v)||0;renderDev();}
+function rmRow(i){DEV.rows.splice(i,1);renderDev();}
+function addRow(){const id=parseInt(document.getElementById('d-add').value,10);const q=parseFloat(document.getElementById('d-add-q').value)||0;
+  const raw=RAWS.find(r=>r.id===id);if(!raw)return;
+  const ex=DEV.rows.find(r=>r.pid===id);if(ex){ex.qty+=q;}else{DEV.rows.push({pid:id,name:raw.name,sub:raw.sub,qty:q});}renderDev();}
+
+function genSpec(){
+  const serv=parseFloat(document.getElementById('d-serv').value)||20;
+  const t=devTotals();const b=t.batch||1;const per=x=>x/b*100,perS=x=>x/b*serv;
+  const alg=allergensOf(DEV.rows);
+  const comp=DEV.rows.slice().sort((a,b2)=>b2.qty-a.qty);
+  const compTxt=comp.map(r=>`${r.name} (${(r.qty/t.batch*100).toFixed(1)}%)`).join(', ');
+  const today=new Date().toLocaleDateString('en-GB');
+  const rows=comp.map(r=>`<tr><td>${r.name}</td><td>${r.sub}</td><td style="text-align:right">${r.qty} g</td><td style="text-align:right">${(r.qty/t.batch*100).toFixed(1)}%</td></tr>`).join('');
+  const html=`<html><head><meta charset="utf-8"><title>${DEV.prodName} — THE BASE Spec Sheet</title>
+  <style>body{font-family:Georgia,serif;color:#1d1a17;max-width:720px;margin:24px auto;padding:0 20px;font-size:13px}
+  h1{font-size:22px;border-bottom:2px solid #1d1a17;padding-bottom:8px} h2{font-size:15px;margin-top:22px;color:#9c6b43}
+  table{width:100%;border-collapse:collapse;margin-top:8px} td,th{border-bottom:1px solid #e2d8cc;padding:6px 8px;text-align:left;font-size:12.5px}
+  th{background:#f4ece1} .kv{display:flex;gap:30px;flex-wrap:wrap;margin-top:8px} .kv div b{display:block;font-size:18px}
+  .muted{color:#7a716a;font-size:11px;margin-top:6px} .logo{letter-spacing:3px;font-weight:700}</style></head><body>
+  <div class="logo">THE BASE</div>
+  <h1>${DEV.prodName}</h1>
+  <div class="muted">Product spec sheet · based on “${DEV.baseName}” · ${today} · R&D draft</div>
+  <h2>Key parameters</h2>
+  <div class="kv">
+    <div>Batch yield<b>${t.batch.toFixed(0)} g</b></div>
+    <div>Serving<b>${serv} g</b></div>
+    <div>Cost / batch<b>${AED(t.cost)} AED</b></div>
+    <div>Cost / serving<b>${AED(t.cost/b*serv)} AED</b></div>
+  </div>
+  <h2>Nutrition (estimate, per 100 g / per ${serv} g serving)</h2>
+  <table><tr><th></th><th style="text-align:right">per 100 g</th><th style="text-align:right">per serving</th></tr>
+  <tr><td>Energy, kcal</td><td style="text-align:right">${per(t.kcal).toFixed(0)}</td><td style="text-align:right">${perS(t.kcal).toFixed(0)}</td></tr>
+  <tr><td>Protein, g</td><td style="text-align:right">${per(t.pr).toFixed(1)}</td><td style="text-align:right">${perS(t.pr).toFixed(1)}</td></tr>
+  <tr><td>Fat, g</td><td style="text-align:right">${per(t.fa).toFixed(1)}</td><td style="text-align:right">${perS(t.fa).toFixed(1)}</td></tr>
+  <tr><td>Carbohydrates, g</td><td style="text-align:right">${per(t.ca).toFixed(1)}</td><td style="text-align:right">${perS(t.ca).toFixed(1)}</td></tr></table>
+  <h2>Composition (by descending weight)</h2>
+  <p>${compTxt}</p>
+  <table><tr><th>Ingredient</th><th>Type</th><th style="text-align:right">Dose</th><th style="text-align:right">% wt</th></tr>${rows}</table>
+  <h2>Allergens</h2><p>${alg.length?alg.join(', '):'None identified from composition (to be confirmed)'}</p>
+  <p class="muted">Nutrition is an estimate from THE BASE internal nutrient table. Cost is based on Odoo raw-material prices on the generation date and excludes packaging and factory overhead. Final values are confirmed by THE BASE lab. This document is a draft for client review.</p>
+  </body></html>`;
+  const w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),350);}
+}
+
+boot();
+</script>
+</body>
+</html>

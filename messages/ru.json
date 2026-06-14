@@ -1,0 +1,77 @@
+{
+  "common": {
+    "appName": "THE BASE",
+    "tagline": "Операционная система напитков"
+  },
+  "auth": {
+    "title": "С возвращением",
+    "subtitle": "Вход в портал THE BASE",
+    "email": "Эл. почта",
+    "emailPlaceholder": "you@thebasebev.com",
+    "password": "Пароль",
+    "passwordPlaceholder": "Ваш пароль Odoo",
+    "showPassword": "Показать пароль",
+    "hidePassword": "Скрыть пароль",
+    "signIn": "Войти",
+    "signingIn": "Вход…",
+    "error": "Неверная почта или пароль.",
+    "footer": "Используйте данные вашей учётной записи Odoo"
+  },
+  "nav": {
+    "lab": "Лаб / R&D",
+    "sales": "Продажи",
+    "supplyChain": "Снабжение",
+    "finance": "Финансы",
+    "production": "Производство",
+    "hr": "HR",
+    "admin": "Админ"
+  },
+  "shell": {
+    "signOut": "Выйти",
+    "language": "Язык",
+    "menu": "Меню"
+  },
+  "forbidden": {
+    "title": "Доступ запрещён",
+    "message": "У вас нет прав для просмотра этого раздела. Если это ошибка — обратитесь к администратору.",
+    "back": "Назад в кабинет"
+  },
+  "lab": {
+    "title": "Клиентские брифы",
+    "subtitle": "Активные R&D-брифы из Odoo",
+    "count": "{count, plural, =0 {Нет брифов} one {# бриф} few {# брифа} many {# брифов} other {# брифов}}",
+    "loading": "Загрузка брифов…",
+    "empty": "Сейчас нет активных брифов.",
+    "error": "Не удалось загрузить брифы из Odoo.",
+    "deadline": "Дедлайн",
+    "owner": "Ответственный",
+    "noDeadline": "Без срока",
+    "unassigned": "Не назначен",
+    "priorityHigh": "Высокий приоритет"
+  },
+  "labFormulas": {
+    "title": "Поиск формул",
+    "subtitle": "Библиотека рецептур с живой себестоимостью из Odoo",
+    "searchPlaceholder": "Поиск по названию или коду…",
+    "count": "{count, plural, =0 {Нет формул} one {# формула} few {# формулы} many {# формул} other {# формул}}",
+    "loading": "Загрузка формул…",
+    "empty": "Формулы не найдены.",
+    "error": "Не удалось загрузить формулы из Odoo.",
+    "cost": "Себест. AED",
+    "price": "Цена AED",
+    "recipeCost": "Рецепт",
+    "inStock": "в наличии",
+    "toOrder": "под заказ"
+  },
+  "sales": {
+    "title": "Воронка продаж",
+    "subtitle": "Активные сделки из Odoo CRM",
+    "count": "{count, plural, =0 {Нет сделок} one {# сделка} few {# сделки} many {# сделок} other {# сделок}}",
+    "loading": "Загрузка воронки…",
+    "empty": "Нет активных сделок.",
+    "error": "Не удалось загрузить сделки из Odoo.",
+    "revenue": "Ожидаемая выручка",
+    "probability": "Вероятность",
+    "noPartner": "Без контакта"
+  }
+}

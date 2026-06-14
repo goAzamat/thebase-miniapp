@@ -1,0 +1,77 @@
+{
+  "common": {
+    "appName": "THE BASE",
+    "tagline": "نظام تشغيل المشروبات"
+  },
+  "auth": {
+    "title": "مرحبًا بعودتك",
+    "subtitle": "تسجيل الدخول إلى بوابة THE BASE",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "you@thebasebev.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "كلمة مرور Odoo الخاصة بك",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جارٍ تسجيل الدخول…",
+    "error": "بريد إلكتروني أو كلمة مرور غير صحيحة.",
+    "footer": "استخدم بيانات حساب Odoo الخاص بك"
+  },
+  "nav": {
+    "lab": "المختبر / البحث والتطوير",
+    "sales": "المبيعات",
+    "supplyChain": "سلسلة التوريد",
+    "finance": "المالية",
+    "production": "الإنتاج",
+    "hr": "الموارد البشرية",
+    "admin": "الإدارة"
+  },
+  "shell": {
+    "signOut": "تسجيل الخروج",
+    "language": "اللغة",
+    "menu": "القائمة"
+  },
+  "forbidden": {
+    "title": "تم رفض الوصول",
+    "message": "ليست لديك صلاحية لعرض هذا القسم. إذا كنت تعتقد أن هذا خطأ، تواصل مع المسؤول.",
+    "back": "العودة إلى لوحة التحكم"
+  },
+  "lab": {
+    "title": "ملخصات العملاء",
+    "subtitle": "ملخصات البحث والتطوير النشطة من Odoo",
+    "count": "{count, plural, =0 {لا ملخصات} one {ملخص واحد} two {ملخصان} few {# ملخصات} many {# ملخصًا} other {# ملخص}}",
+    "loading": "جارٍ تحميل الملخصات…",
+    "empty": "لا توجد ملخصات نشطة حاليًا.",
+    "error": "تعذّر تحميل الملخصات من Odoo.",
+    "deadline": "الموعد النهائي",
+    "owner": "المسؤول",
+    "noDeadline": "بدون موعد",
+    "unassigned": "غير مُسند",
+    "priorityHigh": "أولوية عالية"
+  },
+  "labFormulas": {
+    "title": "باحث الصيغ",
+    "subtitle": "مكتبة الوصفات مع التكلفة الحية من Odoo",
+    "searchPlaceholder": "ابحث بالاسم أو الرمز…",
+    "count": "{count, plural, =0 {لا صيغ} one {صيغة واحدة} two {صيغتان} few {# صيغ} many {# صيغة} other {# صيغة}}",
+    "loading": "جارٍ تحميل الصيغ…",
+    "empty": "لم يتم العثور على صيغ.",
+    "error": "تعذّر تحميل الصيغ من Odoo.",
+    "cost": "التكلفة AED",
+    "price": "السعر AED",
+    "recipeCost": "الوصفة",
+    "inStock": "متوفر",
+    "toOrder": "حسب الطلب"
+  },
+  "sales": {
+    "title": "مسار المبيعات",
+    "subtitle": "الفرص النشطة من Odoo CRM",
+    "count": "{count, plural, =0 {لا فرص} one {فرصة واحدة} two {فرصتان} few {# فرص} many {# فرصة} other {# فرصة}}",
+    "loading": "جارٍ تحميل المسار…",
+    "empty": "لا توجد فرص نشطة.",
+    "error": "تعذّر تحميل الفرص من Odoo.",
+    "revenue": "الإيراد المتوقع",
+    "probability": "الاحتمالية",
+    "noPartner": "بدون جهة اتصال"
+  }
+}

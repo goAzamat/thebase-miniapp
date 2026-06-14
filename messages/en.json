@@ -1,0 +1,77 @@
+{
+  "common": {
+    "appName": "THE BASE",
+    "tagline": "Beverage Operating System"
+  },
+  "auth": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to the THE BASE portal",
+    "email": "Email",
+    "emailPlaceholder": "you@thebasebev.com",
+    "password": "Password",
+    "passwordPlaceholder": "Your Odoo password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "error": "Invalid email or password.",
+    "footer": "Use your Odoo account credentials"
+  },
+  "nav": {
+    "lab": "Lab / R&D",
+    "sales": "Sales",
+    "supplyChain": "Supply Chain",
+    "finance": "Finance",
+    "production": "Production",
+    "hr": "HR",
+    "admin": "Admin"
+  },
+  "shell": {
+    "signOut": "Sign out",
+    "language": "Language",
+    "menu": "Menu"
+  },
+  "forbidden": {
+    "title": "Access denied",
+    "message": "You don’t have permission to view this area. If you think this is a mistake, contact your administrator.",
+    "back": "Back to dashboard"
+  },
+  "lab": {
+    "title": "Client Briefs",
+    "subtitle": "Active R&D briefs from Odoo",
+    "count": "{count, plural, =0 {No briefs} one {# brief} other {# briefs}}",
+    "loading": "Loading briefs…",
+    "empty": "No active briefs right now.",
+    "error": "Could not load briefs from Odoo.",
+    "deadline": "Deadline",
+    "owner": "Owner",
+    "noDeadline": "No deadline",
+    "unassigned": "Unassigned",
+    "priorityHigh": "High priority"
+  },
+  "labFormulas": {
+    "title": "Formula Finder",
+    "subtitle": "Recipe library with live cost from Odoo",
+    "searchPlaceholder": "Search name or code…",
+    "count": "{count, plural, =0 {No formulas} one {# formula} other {# formulas}}",
+    "loading": "Loading formulas…",
+    "empty": "No formulas found.",
+    "error": "Could not load formulas from Odoo.",
+    "cost": "Cost AED",
+    "price": "Price AED",
+    "recipeCost": "Recipe",
+    "inStock": "in stock",
+    "toOrder": "to order"
+  },
+  "sales": {
+    "title": "Sales Pipeline",
+    "subtitle": "Active opportunities from Odoo CRM",
+    "count": "{count, plural, =0 {No leads} one {# lead} other {# leads}}",
+    "loading": "Loading pipeline…",
+    "empty": "No active opportunities.",
+    "error": "Could not load leads from Odoo.",
+    "revenue": "Expected revenue",
+    "probability": "Probability",
+    "noPartner": "No contact"
+  }
+}
