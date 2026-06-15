@@ -47,9 +47,14 @@ export interface OdooUserProfile {
  * Uses the user's OWN uid/key — a user can always read their own record.
  */
 export async function fetchUserProfile(uid: number, key: string): Promise<OdooUserProfile> {
+  // Odoo 19 removed `res.users.groups_id`; it was split into `group_ids`
+  // (directly assigned) and `all_group_ids` (direct + implied). We use the
+  // latter so users who hold a portal role via an implied/parent group still
+  // match the RBAC mapping. `res.groups.full_name` still exists (now formatted
+  // as "Privilege / Name").
   const [user] = await executeKw<
-    Array<{ name: string; login: string; lang: string; groups_id: number[] }>
-  >(uid, key, 'res.users', 'read', [[uid], ['name', 'login', 'lang', 'groups_id']]);
+    Array<{ name: string; login: string; lang: string; all_group_ids: number[] }>
+  >(uid, key, 'res.users', 'read', [[uid], ['name', 'login', 'lang', 'all_group_ids']]);
 
   if (!user) throw new OdooError('User record not found after authentication', 'AUTH');
 
@@ -58,7 +63,7 @@ export async function fetchUserProfile(uid: number, key: string): Promise<OdooUs
     key,
     'res.groups',
     'read',
-    [user.groups_id, ['full_name']],
+    [user.all_group_ids, ['full_name']],
   );
 
   return {
