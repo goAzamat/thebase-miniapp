@@ -133,5 +133,23 @@
     "stageCustoms": "Таможня",
     "stageTransit": "Транзит",
     "stageDelivered": "Доставлено"
+  },
+  "salesIntel": {
+    "title": "S&OP Командный центр",
+    "subtitle": "Движок прогноза спроса — CRM × заводы × рецепты",
+    "pipeline": "Воронка",
+    "count": "{count, plural, =0 {Нет сделок} one {# сделка} few {# сделки} many {# сделок} other {# сделок}}",
+    "empty": "Нет активных сделок.",
+    "error": "Не удалось загрузить воронку.",
+    "weightedForecast": "Взвеш. прогноз",
+    "projectedVolume": "Прогноз объёма",
+    "capacityRunway": "Запас мощности",
+    "weighted": "Взвеш.",
+    "probability": "Вероятн.",
+    "supplySecured": "Сырьё обеспечено",
+    "ingredientDeficit": "Дефицит сырья",
+    "assignTo": "Назначить",
+    "optimizedLoad": "Оптим. загрузка",
+    "simulateBatch": "Симулировать партию"
   }
 }

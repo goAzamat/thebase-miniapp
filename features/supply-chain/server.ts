@@ -17,9 +17,9 @@ import type { FulfillmentData } from './schema';
 
 const MOCK: FulfillmentData = {
   factories: [
-    { name: 'Dubai · Al Quoz', location: 'UAE', loadPct: 78, capacityTons: 120 },
-    { name: 'Ajman Plant', location: 'UAE', loadPct: 54, capacityTons: 80 },
-    { name: 'Malaysia (commissioning)', location: 'MY', loadPct: 19, capacityTons: 150 },
+    { name: 'Dubai · Al Quoz', location: 'UAE', loadPct: 78, capacityTons: 120, operational: true },
+    { name: 'Ajman Plant', location: 'UAE', loadPct: 54, capacityTons: 80, operational: true },
+    { name: 'Malaysia (commissioning)', location: 'MY', loadPct: 19, capacityTons: 150, operational: false },
   ],
   shipments: [
     { id: 's1', orderNo: 'SO-24817', sku: 'MT-002-f500', productName: 'Matcha Classic', client: "Barn's Cafe", destination: 'Jeddah, KSA', batchNumber: 'B-2406-0142', stage: 'transit', progress: 68, qtyKg: 900, eta: '2026-06-22' },

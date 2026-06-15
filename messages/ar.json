@@ -133,5 +133,23 @@
     "stageCustoms": "الجمارك",
     "stageTransit": "العبور",
     "stageDelivered": "تم التسليم"
+  },
+  "salesIntel": {
+    "title": "مركز قيادة S&OP",
+    "subtitle": "محرّك تنبؤ الطلب — CRM × المصانع × الوصفات",
+    "pipeline": "خط الأنابيب",
+    "count": "{count, plural, =0 {لا صفقات} one {صفقة واحدة} two {صفقتان} few {# صفقات} many {# صفقة} other {# صفقة}}",
+    "empty": "لا فرص نشطة.",
+    "error": "تعذّر تحميل خط الأنابيب.",
+    "weightedForecast": "التوقّع المرجّح",
+    "projectedVolume": "الحجم المتوقّع",
+    "capacityRunway": "هامش الطاقة",
+    "weighted": "مرجّح",
+    "probability": "احتمال الفوز",
+    "supplySecured": "الإمداد مؤمّن",
+    "ingredientDeficit": "نقص المكوّنات",
+    "assignTo": "تعيين إلى",
+    "optimizedLoad": "حمل مُحسّن",
+    "simulateBatch": "محاكاة دفعة"
   }
 }

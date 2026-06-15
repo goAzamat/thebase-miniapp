@@ -8,7 +8,15 @@
  */
 import { unstable_cache } from 'next/cache';
 import { serviceSearchRead } from '@/lib/odoo/auth';
-import { mapLead, SALES_LEAD_FIELDS, type RawLead, type Lead } from './schema';
+import { getFulfillment } from '@/features/supply-chain/server';
+import {
+  mapLead,
+  buildSalesIntel,
+  SALES_LEAD_FIELDS,
+  type RawLead,
+  type Lead,
+  type SalesIntel,
+} from './schema';
 
 // Open opportunities only.
 const LEADS_DOMAIN: unknown[] = [
@@ -30,4 +38,22 @@ const fetchLeadsCached = unstable_cache(
 
 export async function getActiveLeads(): Promise<Lead[]> {
   return fetchLeadsCached();
+}
+
+/* ----------------------- S&OP COMMAND CENTER ----------------------- */
+
+// Bridges Sales (CRM leads) with Supply Chain (factory loads) to produce the
+// Predictive Demand Engine payload (KPIs + enriched deal cards).
+const fetchSalesIntelCached = unstable_cache(
+  async (): Promise<SalesIntel> => {
+    const leads = await fetchLeadsCached();
+    const { factories } = await getFulfillment();
+    return buildSalesIntel(leads, factories);
+  },
+  ['sales', 'intel'],
+  { revalidate: 120, tags: ['odoo:crm.lead', 'sales:intel'] },
+);
+
+export async function getSalesIntel(): Promise<SalesIntel> {
+  return fetchSalesIntelCached();
 }

@@ -32,6 +32,7 @@ export interface FactoryLoad {
   location: string;
   loadPct: number; // 0–100 capacity utilization
   capacityTons: number;
+  operational: boolean; // false while a plant is still commissioning
 }
 
 export interface FulfillmentData {
