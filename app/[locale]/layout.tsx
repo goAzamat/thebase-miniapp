@@ -12,7 +12,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 
 import { routing } from '@/i18n/routing';
@@ -41,7 +41,9 @@ export default async function LocaleLayout({
   const { locale } = await params;
 
   // Reject unknown locales (e.g. /xx/...).
-  if (!hasLocale(routing.locales, locale)) notFound();
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
 
   // Enable static rendering for this request's locale.
   setRequestLocale(locale);
