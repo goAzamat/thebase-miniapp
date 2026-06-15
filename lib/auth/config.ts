@@ -50,26 +50,48 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         const login = String(credentials?.login ?? '').trim();
         const password = String(credentials?.password ?? '');
-        if (!login || !password) return null;
+        if (!login || !password) {
+          console.error('[auth] Missing login or password in submitted form');
+          return null;
+        }
 
-        // common.authenticate accepts the user's standard Odoo password here.
-        const uid = await authenticateOdoo(login, password);
-        if (!uid) return null; // invalid Odoo credentials
+        try {
+          // common.authenticate accepts the user's standard Odoo password here.
+          const uid = await authenticateOdoo(login, password);
+          if (!uid) {
+            console.error(
+              `[auth] Odoo rejected credentials for "${login}" ` +
+                `(invalid password, or Odoo requires an API key for XML-RPC login)`,
+            );
+            return null;
+          }
 
-        const profile = await fetchUserProfile(uid, password);
-        const roles = mapGroupsToRoles(profile.groups);
-        if (roles.length === 0) return null; // authenticated but not provisioned for the portal
+          const profile = await fetchUserProfile(uid, password);
+          const roles = mapGroupsToRoles(profile.groups);
+          if (roles.length === 0) {
+            console.error(
+              `[auth] User "${login}" (uid=${uid}) authenticated but has NO portal role. ` +
+                `Odoo groups: ${JSON.stringify(profile.groups)}. ` +
+                `Add them to a "THE BASE Portal / ..." group in Odoo.`,
+            );
+            return null; // authenticated but not provisioned for the portal
+          }
 
-        // The returned object is merged into the JWT by the jwt() callback.
-        // NOTE: we intentionally do NOT return the Odoo apiKey — it is discarded here.
-        return {
-          id: String(uid),
-          name: profile.name,
-          email: profile.login,
-          uid,
-          roles,
-          locale: localeFromOdooLang(profile.lang),
-        };
+          // The returned object is merged into the JWT by the jwt() callback.
+          // NOTE: we intentionally do NOT return the Odoo apiKey — it is discarded here.
+          return {
+            id: String(uid),
+            name: profile.name,
+            email: profile.login,
+            uid,
+            roles,
+            locale: localeFromOdooLang(profile.lang),
+          };
+        } catch (err) {
+          // Surface the real cause in Vercel function logs (env/transport/etc).
+          console.error('[auth] authorize() failed:', err);
+          return null;
+        }
       },
     }),
   ],
