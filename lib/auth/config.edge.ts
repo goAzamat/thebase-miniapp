@@ -17,7 +17,10 @@
  * Edge — they never touch Odoo.
  */
 import type { NextAuthConfig } from 'next-auth';
+import type { AppRole } from './rbac';
 import { defaultModuleFor } from './rbac';
+
+type Locale = 'en' | 'ru' | 'ar';
 
 export const authConfigEdge: NextAuthConfig = {
   session: { strategy: 'jwt' },
@@ -49,12 +52,18 @@ export const authConfigEdge: NextAuthConfig = {
     /**
      * Expose a typed, CLIENT-SAFE session. Derived `defaultModule` saves the
      * client a round-trip when redirecting to the user's landing page.
+     *
+     * NOTE: token fields are read with explicit casts. The `next-auth/jwt`
+     * module augmentation is not reliably picked up under next-auth v5 beta,
+     * so without these casts `token.uid` etc. are typed as `unknown` and the
+     * build fails (TS2322).
      */
     session({ session, token }) {
-      session.user.uid = token.uid;
-      session.user.roles = token.roles;
-      session.user.locale = token.locale;
-      session.user.defaultModule = defaultModuleFor(token.roles);
+      const roles = token.roles as AppRole[];
+      session.user.uid = token.uid as number;
+      session.user.roles = roles;
+      session.user.locale = token.locale as Locale;
+      session.user.defaultModule = defaultModuleFor(roles);
       return session;
     },
   },
