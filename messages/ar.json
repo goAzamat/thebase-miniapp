@@ -80,7 +80,17 @@
     "cheaper": "أرخص ومتوفر:",
     "notFound": "الصيغة غير موجودة.",
     "loading": "جارٍ التحميل…",
-    "error": "تعذّر تحميل هذه الصيغة."
+    "error": "تعذّر تحميل هذه الصيغة.",
+    "name": "المكوّن",
+    "type": "النوع",
+    "dose": "الجرعة",
+    "contribution": "مساهمة التكلفة",
+    "supply": "التوفّر",
+    "deficit": "نقص",
+    "specSheet": "المواصفات → PDF",
+    "target": "التكلفة المستهدفة / حصة",
+    "perServing": "حصة {g}جم",
+    "altPlaceholder": "بديل أرخص متوفر"
   },
   "labIngredients": {
     "title": "المكوّنات",
@@ -107,5 +117,21 @@
     "revenue": "الإيراد المتوقع",
     "probability": "الاحتمالية",
     "noPartner": "بدون جهة اتصال"
+  },
+  "fulfillment": {
+    "title": "التنفيذ ولوجستيات الدُفعات",
+    "subtitle": "تتبّع الشحنات وتتبّع الدُفعات لحظيًا",
+    "factoryLoad": "تحميل المصانع",
+    "capacity": "طن/شهر سعة",
+    "shipments": "الشحنات",
+    "count": "{count, plural, =0 {لا شحنات} one {شحنة واحدة} two {شحنتان} few {# شحنات} many {# شحنة} other {# شحنة}}",
+    "loading": "جارٍ التحميل…",
+    "empty": "لا شحنات نشطة.",
+    "error": "تعذّر تحميل الشحنات.",
+    "eta": "الوصول المتوقع",
+    "stageWarehouse": "المستودع",
+    "stageCustoms": "الجمارك",
+    "stageTransit": "العبور",
+    "stageDelivered": "تم التسليم"
   }
 }

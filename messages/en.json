@@ -80,7 +80,17 @@
     "cheaper": "cheaper in stock:",
     "notFound": "Formula not found.",
     "loading": "Loading…",
-    "error": "Could not load this formula."
+    "error": "Could not load this formula.",
+    "name": "Ingredient",
+    "type": "Type",
+    "dose": "Dose",
+    "contribution": "Cost contribution",
+    "supply": "Supply",
+    "deficit": "Deficit",
+    "specSheet": "Spec sheet → PDF",
+    "target": "Target cost / serving",
+    "perServing": "{g}g serving",
+    "altPlaceholder": "cheaper alternative in stock"
   },
   "labIngredients": {
     "title": "Ingredients",
@@ -107,5 +117,21 @@
     "revenue": "Expected revenue",
     "probability": "Probability",
     "noPartner": "No contact"
+  },
+  "fulfillment": {
+    "title": "Fulfillment & Batch Logistics",
+    "subtitle": "Live shipment tracking and batch traceability",
+    "factoryLoad": "Factory load",
+    "capacity": "t/mo capacity",
+    "shipments": "Shipments",
+    "count": "{count, plural, =0 {No shipments} one {# shipment} other {# shipments}}",
+    "loading": "Loading…",
+    "empty": "No active shipments.",
+    "error": "Could not load shipments.",
+    "eta": "ETA",
+    "stageWarehouse": "Warehouse",
+    "stageCustoms": "Customs",
+    "stageTransit": "Transit",
+    "stageDelivered": "Delivered"
   }
 }

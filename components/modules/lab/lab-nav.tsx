@@ -2,18 +2,19 @@
 /**
  * components/modules/lab/lab-nav.tsx
  * -------------------------------------------------------------
- * Reusable intra-module tab bar for the Lab module (Briefs | Formulas).
- * Rendered once in lab/layout.tsx so it appears on every Lab page directly
- * under the Topbar. Active state is derived from the locale-stripped path.
+ * Reusable intra-module tab bar for the Lab module
+ * (Briefs | Formulas | Ingredients), with lucide icons and an amber accent.
+ * Rendered once in lab/layout.tsx so it sits under the Topbar on every page.
  */
 import { useTranslations } from 'next-intl';
+import { ClipboardList, FlaskConical, Boxes, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
 
-const TABS = [
-  { href: '/lab', key: 'briefs', exact: true },
-  { href: '/lab/formulas', key: 'formulas', exact: false },
-  { href: '/lab/ingredients', key: 'ingredients', exact: false },
-] as const;
+const TABS: { href: string; key: string; exact: boolean; icon: LucideIcon }[] = [
+  { href: '/lab', key: 'briefs', exact: true, icon: ClipboardList },
+  { href: '/lab/formulas', key: 'formulas', exact: false, icon: FlaskConical },
+  { href: '/lab/ingredients', key: 'ingredients', exact: false, icon: Boxes },
+];
 
 export function LabNav() {
   const t = useTranslations('labNav');
@@ -24,16 +25,18 @@ export function LabNav() {
       <nav className="flex gap-1">
         {TABS.map((tab) => {
           const active = tab.exact ? pathname === tab.href : pathname.startsWith(tab.href);
+          const Icon = tab.icon;
           return (
             <Link
               key={tab.href}
               href={tab.href}
-              className={`-mb-px border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
+              className={`-mb-px flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
                 active
-                  ? 'border-[#9c6b43] text-[#1d1a17]'
+                  ? 'border-amber-500 text-amber-700'
                   : 'border-transparent text-[#9a8a78] hover:text-[#6f6457]'
               }`}
             >
+              <Icon className="h-4 w-4" />
               {t(tab.key)}
             </Link>
           );

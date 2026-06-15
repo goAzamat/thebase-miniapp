@@ -182,6 +182,7 @@ export interface IngredientLine {
   type: string; // raw-material sub-category, e.g. "Flavour"
   qty: number;
   uom: string;
+  pricePerKg: number; // base cost per kg
   cost: number;
   costPct: number; // share of total recipe cost
   weightPct: number; // share of total batch weight
@@ -195,12 +196,18 @@ export interface FormulaDetail {
   name: string;
   category: string;
   catalogCost: number;
-  recipeCost: number;
+  recipeCost: number; // computed cost per batch (ingredients only)
   price: number;
   stock: number;
   inStock: boolean;
+  totalWeight: number; // grams per batch
+  servingSize: number; // grams per serving (standard dose)
+  costPerServing: number; // recipeCost scaled to one serving
   ingredients: IngredientLine[];
 }
+
+/** Standard serving dose used for per-serving cost (grams). */
+export const SERVING_SIZE_G = 20;
 
 /** "Raw Material / Flavour Raw Material" → "Flavour". */
 export function rawSub(cat: string): string {
@@ -294,6 +301,7 @@ export function buildFormulaDetail(
         type: rawSub(m.cat),
         qty: m.qty,
         uom: m.uom,
+        pricePerKg: m.raw ? m.raw.standard_price : 0,
         cost: Math.round(m.cost * 1000) / 1000,
         costPct,
         weightPct,
@@ -302,6 +310,9 @@ export function buildFormulaDetail(
       };
     })
     .sort((a, b) => b.cost - a.cost);
+
+  const costPerServing =
+    totalWeight > 0 ? (totalCost / totalWeight) * SERVING_SIZE_G : 0;
 
   const categ = finished.categ_id ? finished.categ_id[1] : '';
   return {
@@ -314,6 +325,9 @@ export function buildFormulaDetail(
     price: finished.list_price,
     stock: finished.qty_available,
     inStock: finished.qty_available > 0,
+    totalWeight: Math.round(totalWeight * 100) / 100,
+    servingSize: SERVING_SIZE_G,
+    costPerServing: Math.round(costPerServing * 1000) / 1000,
     ingredients,
   };
 }
