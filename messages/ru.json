@@ -217,5 +217,35 @@
       "degraded": "Деградация",
       "error": "Ошибка"
     }
+  },
+  "supplyNav": { "title": "Снабжение", "procurement": "Закупки", "fulfillment": "Отгрузки" },
+  "procurement": {
+    "reorderTitle": "Топ-20 точек дозаказа",
+    "ingredient": "Ингредиент",
+    "stockKg": "Остаток (кг)",
+    "avg3m": "Ср. 3 мес (кг/мес)",
+    "daysToStockout": "Дней до нуля",
+    "status": "Статус",
+    "action": "Действие",
+    "createPR": "Создать заявку",
+    "prPending": "Заявка создана",
+    "flag": { "safe": "Норма", "reorder": "Дозаказ", "danger": "Риск нуля" },
+    "rfqTitle": "RFQ и шаблон WhatsApp",
+    "supplier": "Поставщик",
+    "qtyKg": "Кол-во (кг)",
+    "targetPrice": "Цель AED/кг",
+    "copyRfq": "Скопировать RFQ",
+    "copied": "Скопировано",
+    "rfqTracking": "Трекинг RFQ",
+    "logQuote": "Внести котировку",
+    "rfqStatus": { "sent_whatsapp": "Отправлено в WhatsApp", "received_quote": "Котировка внесена", "rejected": "Отклонено" },
+    "importTitle": "Таможенный шлюз: 7 документов",
+    "airFreight": "Авиа",
+    "seaFreight": "Море",
+    "arrived": "Прибыл",
+    "shipStatus": { "customs": "Таможня", "transit": "Транзит", "arrived": "Прибыл" },
+    "docNames": { "cn": "Накладная (CN)", "inv": "Инвойс", "bl": "Коносамент / AWB", "pl": "Упаковочный лист", "ul": "Гарантийное письмо", "hc": "Ветсертификат", "co": "Сертификат происхождения" },
+    "hcWarning": "{count, plural, one {# отгрузка скоро прибудет без ветсертификата} few {# отгрузки скоро прибудут без ветсертификата} many {# отгрузок скоро прибудут без ветсертификата} other {# отгрузок скоро прибудут без ветсертификата}}:",
+    "error": "Не удалось загрузить данные закупок."
   }
 }

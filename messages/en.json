@@ -217,5 +217,35 @@
       "degraded": "Degraded",
       "error": "Error"
     }
+  },
+  "supplyNav": { "title": "Supply Chain", "procurement": "Procurement", "fulfillment": "Fulfillment" },
+  "procurement": {
+    "reorderTitle": "Top-20 Smart Reorder Points",
+    "ingredient": "Ingredient",
+    "stockKg": "Stock (kg)",
+    "avg3m": "3M avg (kg/mo)",
+    "daysToStockout": "Days to stockout",
+    "status": "Status",
+    "action": "Action",
+    "createPR": "Create PR",
+    "prPending": "PR pending",
+    "flag": { "safe": "Safe", "reorder": "Reorder", "danger": "Stockout danger" },
+    "rfqTitle": "Supplier RFQ & WhatsApp Template",
+    "supplier": "Supplier",
+    "qtyKg": "Qty (kg)",
+    "targetPrice": "Target AED/kg",
+    "copyRfq": "Copy RFQ",
+    "copied": "Copied",
+    "rfqTracking": "RFQ tracking",
+    "logQuote": "Log quote",
+    "rfqStatus": { "sent_whatsapp": "Sent via WhatsApp", "received_quote": "Quote logged", "rejected": "Rejected" },
+    "importTitle": "7-Document Import Customs Gate",
+    "airFreight": "Air Freight",
+    "seaFreight": "Sea Freight",
+    "arrived": "Arrived",
+    "shipStatus": { "customs": "Customs", "transit": "Transit", "arrived": "Arrived" },
+    "docNames": { "cn": "Consignment Note", "inv": "Commercial Invoice", "bl": "AWB / Bill of Lading", "pl": "Packing List", "ul": "Undertaking Letter", "hc": "Health Certificate", "co": "Certificate of Origin" },
+    "hcWarning": "{count, plural, one {# shipment is nearing arrival without a Health Certificate} other {# shipments are nearing arrival without a Health Certificate}}:",
+    "error": "Could not load procurement data."
   }
 }
