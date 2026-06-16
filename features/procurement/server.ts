@@ -21,6 +21,7 @@ import {
 } from './schema';
 import { fetchLiveOdooStocks, stockByCode, createOdooPurchaseOrder } from './odoo-stock';
 import { isCreditLocked } from '@/features/finance/schema';
+import { gateEnabled } from '@/features/admin/flags';
 
 const tick = () => new Promise<void>((r) => setTimeout(r, 80));
 
@@ -58,7 +59,7 @@ export async function createPurchaseRequisition(input: {
 }): Promise<CreatePrResult> {
   // Cross-module credit gate — abort BEFORE any Odoo write if the linked
   // client is past 100 days (System Lock).
-  if (input.clientName && isCreditLocked(input.clientName)) {
+  if (gateEnabled('credit_lock') && input.clientName && isCreditLocked(input.clientName)) {
     return { success: false, error: 'CREDIT_LOCK_VIOLATION', client: input.clientName };
   }
 

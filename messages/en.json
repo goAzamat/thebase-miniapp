@@ -163,8 +163,17 @@
     "leadBuffer": "Lead buffer",
     "daysShort": "d",
     "parse": "Parse",
-    "class": { "b2b": "B2B Inbound", "b2c": "B2C Walk-in", "rush": "Rush Order" },
-    "rnd": { "unparsed": "Unparsed", "parsing": "Parsing", "calculated": "Calculated", "quoted": "Quoted" }
+    "class": {
+      "b2b": "B2B Inbound",
+      "b2c": "B2C Walk-in",
+      "rush": "Rush Order"
+    },
+    "rnd": {
+      "unparsed": "Unparsed",
+      "parsing": "Parsing",
+      "calculated": "Calculated",
+      "quoted": "Quoted"
+    }
   },
   "production": {
     "title": "Production Control",
@@ -187,10 +196,29 @@
     "collapse": "Hide audit",
     "loss": "Total loss",
     "noVariance": "No consumption reported yet.",
-    "facility": { "dubai": "Dubai · Al Quoz Plant", "ajman": "Ajman Plant" },
-    "stage": { "queued": "Queued", "mixing": "Mixing", "bottling": "Bottling", "qa_check": "QA Validation", "ready": "Released" },
-    "qa": { "hold": "QA Hold", "released": "Released to Logistics", "check": "QA Check" },
-    "matrix": { "ingredient": "Ingredient", "theoretical": "Theoretical Qty (kg)", "actual": "Actual Qty (kg)", "variance": "Variance %", "costImpact": "Cost Impact AED" }
+    "facility": {
+      "dubai": "Dubai · Al Quoz Plant",
+      "ajman": "Ajman Plant"
+    },
+    "stage": {
+      "queued": "Queued",
+      "mixing": "Mixing",
+      "bottling": "Bottling",
+      "qa_check": "QA Validation",
+      "ready": "Released"
+    },
+    "qa": {
+      "hold": "QA Hold",
+      "released": "Released to Logistics",
+      "check": "QA Check"
+    },
+    "matrix": {
+      "ingredient": "Ingredient",
+      "theoretical": "Theoretical Qty (kg)",
+      "actual": "Actual Qty (kg)",
+      "variance": "Variance %",
+      "costImpact": "Cost Impact AED"
+    }
   },
   "finance": {
     "title": "Executive Control Tower",
@@ -215,7 +243,12 @@
     "totalLeak": "Total leak",
     "arTitle": "Accounts Receivable — Credit Risk Lock",
     "systemLockMsg": "New manufacturing operations are restricted for clients past 100 days:",
-    "bucket": { "current": "Current", "d31_60": "31–60 days", "d61_90": "61–90 days", "d100plus": "100+ Days" },
+    "bucket": {
+      "current": "Current",
+      "d31_60": "31–60 days",
+      "d61_90": "61–90 days",
+      "d100plus": "100+ Days"
+    },
     "projectsTitle": "CEO Project Governance",
     "governanceKpi": "Owner + milestone",
     "project": "Initiative",
@@ -223,7 +256,11 @@
     "milestone": "Milestone",
     "status": "Status",
     "budget": "Budget AED",
-    "projStatus": { "on_track": "On track", "at_risk": "At risk", "blocked": "Blocked" },
+    "projStatus": {
+      "on_track": "On track",
+      "at_risk": "At risk",
+      "blocked": "Blocked"
+    },
     "error": "Could not load financials."
   },
   "hr": {
@@ -247,7 +284,10 @@
     "underperforming": "Underperforming",
     "stageMixing": "Mixing",
     "stageBottling": "Bottling",
-    "facilityName": { "dubai": "Dubai · Al Quoz", "ajman": "Ajman Plant" },
+    "facilityName": {
+      "dubai": "Dubai · Al Quoz",
+      "ajman": "Ajman Plant"
+    },
     "healthTitle": "Food Safety Sanitary Clearance (HACCP)",
     "employee": "Employee",
     "role": "Role",
@@ -268,7 +308,7 @@
   },
   "admin": {
     "title": "Integration Console",
-    "subtitle": "Odoo API connection matrix and logs",
+    "subtitle": "Governance, integration health and asynchronous webhook audit",
     "connections": "Connection matrix",
     "model": "Model",
     "status": "Status",
@@ -280,9 +320,60 @@
       "connected": "Connected",
       "degraded": "Degraded",
       "error": "Error"
+    },
+    "pingTitle": "Connection Status",
+    "runDiagnostic": "Run Diagnostic Check",
+    "diagnosticRunning": "Running diagnostic…",
+    "lastChecked": "Last checked",
+    "healthValue": {
+      "online": "Online",
+      "degraded": "Degraded",
+      "offline": "Offline"
+    },
+    "serviceLabel": {
+      "odoo_xmlrpc": "Odoo ERP Engine",
+      "whatsapp_meta": "Meta WhatsApp Gateway",
+      "vercel_kv": "Background Queue Worker"
+    },
+    "serviceDesc": {
+      "odoo_xmlrpc": "XML-RPC · execute_kw",
+      "whatsapp_meta": "Inbound webhook · graph.facebook.com",
+      "vercel_kv": "Idempotency ledger · waitUntil"
+    },
+    "ledgerTitle": "Idempotency Ledger",
+    "ledgerSubtitle": "Webhook auditor — asynchronous ingestion queue",
+    "col": {
+      "messageId": "Message ID",
+      "status": "Status",
+      "receivedAt": "Received at",
+      "error": "Error payload"
+    },
+    "ledgerStatus": {
+      "pending": "Pending",
+      "processed": "Processed",
+      "failed": "Failed"
+    },
+    "flagsTitle": "Feature Flags",
+    "flagsSubtitle": "Master override switches. Disabling a gate bypasses live backend validation errors during batch initialization and purchase-order generation.",
+    "enforced": "Enforced",
+    "bypassed": "Bypassed",
+    "bypassRoles": "Bypass roles",
+    "gate": {
+      "credit_lock": {
+        "label": "Global Credit Limit Enforcement",
+        "desc": "Blocks batch start and purchase-order generation for clients past 100 days in AR. Toggling off bypasses the System Lock."
+      },
+      "haccp_lock": {
+        "label": "HACCP Sanitary Clearance Gate",
+        "desc": "Halts production when the assigned operator's sanitary card is expired or renews in under 7 days. Toggling off bypasses the compliance block."
+      }
     }
   },
-  "supplyNav": { "title": "Supply Chain", "procurement": "Procurement", "fulfillment": "Fulfillment" },
+  "supplyNav": {
+    "title": "Supply Chain",
+    "procurement": "Procurement",
+    "fulfillment": "Fulfillment"
+  },
   "procurement": {
     "reorderTitle": "Top-20 Smart Reorder Points",
     "ingredient": "Ingredient",
@@ -293,7 +384,11 @@
     "action": "Action",
     "createPR": "Create PR",
     "prPending": "PR pending",
-    "flag": { "safe": "Safe", "reorder": "Reorder", "danger": "Stockout danger" },
+    "flag": {
+      "safe": "Safe",
+      "reorder": "Reorder",
+      "danger": "Stockout danger"
+    },
     "rfqTitle": "Supplier RFQ & WhatsApp Template",
     "supplier": "Supplier",
     "qtyKg": "Qty (kg)",
@@ -302,13 +397,29 @@
     "copied": "Copied",
     "rfqTracking": "RFQ tracking",
     "logQuote": "Log quote",
-    "rfqStatus": { "sent_whatsapp": "Sent via WhatsApp", "received_quote": "Quote logged", "rejected": "Rejected" },
+    "rfqStatus": {
+      "sent_whatsapp": "Sent via WhatsApp",
+      "received_quote": "Quote logged",
+      "rejected": "Rejected"
+    },
     "importTitle": "7-Document Import Customs Gate",
     "airFreight": "Air Freight",
     "seaFreight": "Sea Freight",
     "arrived": "Arrived",
-    "shipStatus": { "customs": "Customs", "transit": "Transit", "arrived": "Arrived" },
-    "docNames": { "cn": "Consignment Note", "inv": "Commercial Invoice", "bl": "AWB / Bill of Lading", "pl": "Packing List", "ul": "Undertaking Letter", "hc": "Health Certificate", "co": "Certificate of Origin" },
+    "shipStatus": {
+      "customs": "Customs",
+      "transit": "Transit",
+      "arrived": "Arrived"
+    },
+    "docNames": {
+      "cn": "Consignment Note",
+      "inv": "Commercial Invoice",
+      "bl": "AWB / Bill of Lading",
+      "pl": "Packing List",
+      "ul": "Undertaking Letter",
+      "hc": "Health Certificate",
+      "co": "Certificate of Origin"
+    },
     "hcWarning": "{count, plural, one {# shipment is nearing arrival without a Health Certificate} other {# shipments are nearing arrival without a Health Certificate}}:",
     "error": "Could not load procurement data."
   }

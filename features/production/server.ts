@@ -10,6 +10,7 @@ import { buildProduction, mapMrpState, type ProductionData } from './schema';
 import { fetchMrpProductions } from './odoo-mrp';
 import { isCreditLocked } from '@/features/finance/schema';
 import { operatorForBatch, healthForEmployee, isHealthCritical } from '@/features/hr/schema';
+import { gateEnabled } from '@/features/admin/flags';
 
 export async function getProductionData(): Promise<ProductionData> {
   const base = buildProduction();
@@ -55,17 +56,19 @@ export async function startBatch(batchId: string): Promise<BatchStartResult> {
   const batch = buildProduction().batches.find((b) => b.id === batchId);
   const client = batch?.clientName ?? '';
 
-  // Gate 1 — credit compliance.
-  if (isCreditLocked(client)) {
+  // Gate 1 — credit compliance. Skipped when the admin disables `credit_lock`.
+  if (gateEnabled('credit_lock') && isCreditLocked(client)) {
     return { success: false, error: 'CREDIT_LOCK_VIOLATION', client };
   }
 
-  // Gate 2 — HACCP sanitary clearance of the assigned operator.
-  const operator = operatorForBatch(batchId);
-  if (operator) {
-    const health = healthForEmployee(operator.name);
-    if (health && isHealthCritical(health)) {
-      return { success: false, error: 'HACCP_COMPLIANCE_VIOLATION', operatorName: operator.name };
+  // Gate 2 — HACCP sanitary clearance. Skipped when admin disables `haccp_lock`.
+  if (gateEnabled('haccp_lock')) {
+    const operator = operatorForBatch(batchId);
+    if (operator) {
+      const health = healthForEmployee(operator.name);
+      if (health && isHealthCritical(health)) {
+        return { success: false, error: 'HACCP_COMPLIANCE_VIOLATION', operatorName: operator.name };
+      }
     }
   }
 

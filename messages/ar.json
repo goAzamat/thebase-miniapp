@@ -163,8 +163,17 @@
     "leadBuffer": "هامش المهلة",
     "daysShort": "ي",
     "parse": "تحليل",
-    "class": { "b2b": "عقد B2B", "b2c": "تجزئة B2C", "rush": "عاجل" },
-    "rnd": { "unparsed": "غير محلّل", "parsing": "تحليل", "calculated": "محسوب", "quoted": "عرض سعر" }
+    "class": {
+      "b2b": "عقد B2B",
+      "b2c": "تجزئة B2C",
+      "rush": "عاجل"
+    },
+    "rnd": {
+      "unparsed": "غير محلّل",
+      "parsing": "تحليل",
+      "calculated": "محسوب",
+      "quoted": "عرض سعر"
+    }
   },
   "production": {
     "title": "التحكّم بالإنتاج",
@@ -187,10 +196,29 @@
     "collapse": "إخفاء التدقيق",
     "loss": "إجمالي الخسارة",
     "noVariance": "لم يُسجّل استهلاك بعد.",
-    "facility": { "dubai": "دبي · القوز", "ajman": "مصنع عجمان" },
-    "stage": { "queued": "في الانتظار", "mixing": "خلط", "bottling": "تعبئة", "qa_check": "التحقق من الجودة", "ready": "صدر" },
-    "qa": { "hold": "احتجاز الجودة", "released": "تم التسليم للوجستيات", "check": "فحص الجودة" },
-    "matrix": { "ingredient": "المكوّن", "theoretical": "الكمية النظرية (كجم)", "actual": "الكمية الفعلية (كجم)", "variance": "الانحراف %", "costImpact": "الأثر AED" }
+    "facility": {
+      "dubai": "دبي · القوز",
+      "ajman": "مصنع عجمان"
+    },
+    "stage": {
+      "queued": "في الانتظار",
+      "mixing": "خلط",
+      "bottling": "تعبئة",
+      "qa_check": "التحقق من الجودة",
+      "ready": "صدر"
+    },
+    "qa": {
+      "hold": "احتجاز الجودة",
+      "released": "تم التسليم للوجستيات",
+      "check": "فحص الجودة"
+    },
+    "matrix": {
+      "ingredient": "المكوّن",
+      "theoretical": "الكمية النظرية (كجم)",
+      "actual": "الكمية الفعلية (كجم)",
+      "variance": "الانحراف %",
+      "costImpact": "الأثر AED"
+    }
   },
   "finance": {
     "title": "برج التحكّم التنفيذي",
@@ -215,7 +243,12 @@
     "totalLeak": "إجمالي التسرّب",
     "arTitle": "الذمم المدينة — قفل مخاطر الائتمان",
     "systemLockMsg": "تُقيّد عمليات التصنيع الجديدة للعملاء بعد 100 يوم:",
-    "bucket": { "current": "حالي", "d31_60": "31–60 يومًا", "d61_90": "61–90 يومًا", "d100plus": "100+ يوم" },
+    "bucket": {
+      "current": "حالي",
+      "d31_60": "31–60 يومًا",
+      "d61_90": "61–90 يومًا",
+      "d100plus": "100+ يوم"
+    },
     "projectsTitle": "حوكمة مشاريع الرئيس التنفيذي",
     "governanceKpi": "مالك + مَعلم",
     "project": "المبادرة",
@@ -223,7 +256,11 @@
     "milestone": "المَعلم",
     "status": "الحالة",
     "budget": "الميزانية AED",
-    "projStatus": { "on_track": "على المسار", "at_risk": "في خطر", "blocked": "محظور" },
+    "projStatus": {
+      "on_track": "على المسار",
+      "at_risk": "في خطر",
+      "blocked": "محظور"
+    },
     "error": "تعذّر تحميل البيانات المالية."
   },
   "hr": {
@@ -247,7 +284,10 @@
     "underperforming": "أداء منخفض",
     "stageMixing": "خلط",
     "stageBottling": "تعبئة",
-    "facilityName": { "dubai": "دبي · القوز", "ajman": "مصنع عجمان" },
+    "facilityName": {
+      "dubai": "دبي · القوز",
+      "ajman": "مصنع عجمان"
+    },
     "healthTitle": "التصريح الصحي (HACCP)",
     "employee": "الموظف",
     "role": "الدور",
@@ -267,8 +307,8 @@
     "error": "تعذّر تحميل بيانات الموارد البشرية."
   },
   "admin": {
-    "title": "وحدة التكامل",
-    "subtitle": "مصفوفة اتصال Odoo API والسجلات",
+    "title": "وحدة تحكم التكامل",
+    "subtitle": "الحوكمة وصحة التكامل وتدقيق الـ Webhook غير المتزامن",
     "connections": "مصفوفة الاتصال",
     "model": "النموذج",
     "status": "الحالة",
@@ -280,9 +320,60 @@
       "connected": "متصل",
       "degraded": "متدهور",
       "error": "خطأ"
+    },
+    "pingTitle": "حالة الاتصال",
+    "runDiagnostic": "تشغيل فحص تشخيصي",
+    "diagnosticRunning": "جارٍ التشخيص…",
+    "lastChecked": "آخر فحص",
+    "healthValue": {
+      "online": "متصل",
+      "degraded": "متدهور",
+      "offline": "غير متصل"
+    },
+    "serviceLabel": {
+      "odoo_xmlrpc": "محرك Odoo ERP",
+      "whatsapp_meta": "بوابة Meta WhatsApp",
+      "vercel_kv": "عامل قائمة الانتظار الخلفية"
+    },
+    "serviceDesc": {
+      "odoo_xmlrpc": "XML-RPC · execute_kw",
+      "whatsapp_meta": "Webhook وارد · graph.facebook.com",
+      "vercel_kv": "سجل عدم التكرار · waitUntil"
+    },
+    "ledgerTitle": "سجل عدم التكرار",
+    "ledgerSubtitle": "مدقق الـ Webhook — قائمة انتظار الاستيعاب غير المتزامن",
+    "col": {
+      "messageId": "معرّف الرسالة",
+      "status": "الحالة",
+      "receivedAt": "وقت الاستلام",
+      "error": "محتوى الخطأ"
+    },
+    "ledgerStatus": {
+      "pending": "قيد الانتظار",
+      "processed": "تمت المعالجة",
+      "failed": "فشل"
+    },
+    "flagsTitle": "أعلام الميزات",
+    "flagsSubtitle": "مفاتيح التجاوز الرئيسية. تعطيل البوابة يتجاوز أخطاء التحقق الفعلية في الخادم أثناء بدء الدفعة وإنشاء أمر الشراء.",
+    "enforced": "مُفعّل",
+    "bypassed": "متجاوَز",
+    "bypassRoles": "أدوار التجاوز",
+    "gate": {
+      "credit_lock": {
+        "label": "الإنفاذ العالمي لحد الائتمان",
+        "desc": "يمنع بدء الدفعة وإنشاء أمر الشراء للعملاء المتأخرين أكثر من 100 يوم. إيقافه يتجاوز قفل النظام."
+      },
+      "haccp_lock": {
+        "label": "بوابة التصريح الصحي HACCP",
+        "desc": "يوقف الإنتاج عندما تكون البطاقة الصحية للمشغّل منتهية أو تُجدَّد خلال أقل من 7 أيام. إيقافه يتجاوز فحص الامتثال."
+      }
     }
   },
-  "supplyNav": { "title": "سلسلة التوريد", "procurement": "المشتريات", "fulfillment": "التنفيذ" },
+  "supplyNav": {
+    "title": "سلسلة التوريد",
+    "procurement": "المشتريات",
+    "fulfillment": "التنفيذ"
+  },
   "procurement": {
     "reorderTitle": "أعلى 20 نقطة إعادة طلب",
     "ingredient": "المكوّن",
@@ -293,7 +384,11 @@
     "action": "إجراء",
     "createPR": "إنشاء طلب شراء",
     "prPending": "طلب قيد الموافقة",
-    "flag": { "safe": "آمن", "reorder": "إعادة طلب", "danger": "خطر نفاد" },
+    "flag": {
+      "safe": "آمن",
+      "reorder": "إعادة طلب",
+      "danger": "خطر نفاد"
+    },
     "rfqTitle": "طلب عرض سعر وقالب واتساب",
     "supplier": "المورّد",
     "qtyKg": "الكمية (كجم)",
@@ -302,13 +397,29 @@
     "copied": "تم النسخ",
     "rfqTracking": "تتبّع العروض",
     "logQuote": "تسجيل العرض",
-    "rfqStatus": { "sent_whatsapp": "أُرسل عبر واتساب", "received_quote": "تم تسجيل العرض", "rejected": "مرفوض" },
+    "rfqStatus": {
+      "sent_whatsapp": "أُرسل عبر واتساب",
+      "received_quote": "تم تسجيل العرض",
+      "rejected": "مرفوض"
+    },
     "importTitle": "بوابة جمارك الاستيراد — 7 مستندات",
     "airFreight": "شحن جوي",
     "seaFreight": "شحن بحري",
     "arrived": "وصل",
-    "shipStatus": { "customs": "جمارك", "transit": "عبور", "arrived": "وصل" },
-    "docNames": { "cn": "إشعار الشحنة", "inv": "فاتورة تجارية", "bl": "بوليصة الشحن / AWB", "pl": "قائمة التعبئة", "ul": "خطاب تعهّد", "hc": "شهادة صحية", "co": "شهادة المنشأ" },
+    "shipStatus": {
+      "customs": "جمارك",
+      "transit": "عبور",
+      "arrived": "وصل"
+    },
+    "docNames": {
+      "cn": "إشعار الشحنة",
+      "inv": "فاتورة تجارية",
+      "bl": "بوليصة الشحن / AWB",
+      "pl": "قائمة التعبئة",
+      "ul": "خطاب تعهّد",
+      "hc": "شهادة صحية",
+      "co": "شهادة المنشأ"
+    },
     "hcWarning": "{count, plural, zero {لا شحنات} one {شحنة واحدة تقترب من الوصول بدون شهادة صحية} two {شحنتان تقتربان من الوصول بدون شهادة صحية} few {# شحنات تقترب من الوصول بدون شهادة صحية} many {# شحنة تقترب من الوصول بدون شهادة صحية} other {# شحنة تقترب من الوصول بدون شهادة صحية}}:",
     "error": "تعذّر تحميل بيانات المشتريات."
   }
