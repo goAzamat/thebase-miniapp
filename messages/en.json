@@ -151,5 +151,61 @@
     "assignTo": "Assign to",
     "optimizedLoad": "Optimized load",
     "simulateBatch": "Simulate Batch"
+  },
+  "production": {
+    "title": "Production Control",
+    "subtitle": "Live batches and yield variance vs demand",
+    "projected": "Projected",
+    "committed": "Committed",
+    "free": "Free capacity",
+    "runway": "Runway",
+    "liveBatches": "Live batches",
+    "yieldVariance": "Yield variance",
+    "error": "Could not load production data.",
+    "mixing": "Mixing",
+    "bottling": "Bottling",
+    "qc": "QC",
+    "ready": "Ready"
+  },
+  "finance": {
+    "title": "Executive Control Tower",
+    "subtitle": "Corporate health ledger",
+    "revenueMTD": "Revenue MTD",
+    "cash": "Cash in bank",
+    "ebitda": "EBITDA margin",
+    "receivables": "Receivables",
+    "payables": "Payables",
+    "runway": "Runway",
+    "months": "mo",
+    "workingCapital": "Working capital",
+    "error": "Could not load financials."
+  },
+  "hr": {
+    "title": "People & Floor Allocation",
+    "subtitle": "Headcount, utilization and plant coverage",
+    "headcount": "Headcount",
+    "utilization": "Avg utilization",
+    "openRoles": "Open roles",
+    "departments": "Departments",
+    "floor": "Factory floor",
+    "operators": "ops",
+    "shifts": "shifts",
+    "error": "Could not load HR data."
+  },
+  "admin": {
+    "title": "Integration Console",
+    "subtitle": "Odoo API connection matrix and logs",
+    "connections": "Connection matrix",
+    "model": "Model",
+    "status": "Status",
+    "lastSync": "Last sync",
+    "records": "Records",
+    "logs": "Integration logs",
+    "error": "Could not load integration status.",
+    "statusValue": {
+      "connected": "Connected",
+      "degraded": "Degraded",
+      "error": "Error"
+    }
   }
 }

@@ -151,5 +151,61 @@
     "assignTo": "تعيين إلى",
     "optimizedLoad": "حمل مُحسّن",
     "simulateBatch": "محاكاة دفعة"
+  },
+  "production": {
+    "title": "التحكّم بالإنتاج",
+    "subtitle": "الدُفعات الحيّة وانحراف الإنتاجية مقابل الطلب",
+    "projected": "المتوقّع",
+    "committed": "ملتزم",
+    "free": "سعة حرة",
+    "runway": "الهامش",
+    "liveBatches": "الدُفعات الحيّة",
+    "yieldVariance": "انحراف الإنتاجية",
+    "error": "تعذّر تحميل بيانات الإنتاج.",
+    "mixing": "خلط",
+    "bottling": "تعبئة",
+    "qc": "فحص الجودة",
+    "ready": "جاهز"
+  },
+  "finance": {
+    "title": "برج التحكّم التنفيذي",
+    "subtitle": "سجل صحة الشركة",
+    "revenueMTD": "إيراد الشهر",
+    "cash": "النقد في البنك",
+    "ebitda": "هامش EBITDA",
+    "receivables": "ذمم مدينة",
+    "payables": "ذمم دائنة",
+    "runway": "الهامش",
+    "months": "شهر",
+    "workingCapital": "رأس المال العامل",
+    "error": "تعذّر تحميل البيانات المالية."
+  },
+  "hr": {
+    "title": "الموظفون وتوزيع الأرضية",
+    "subtitle": "العدد والاستغلال وتغطية المصانع",
+    "headcount": "العدد",
+    "utilization": "متوسط الاستغلال",
+    "openRoles": "وظائف شاغرة",
+    "departments": "الأقسام",
+    "floor": "أرضية المصنع",
+    "operators": "مشغّل",
+    "shifts": "ورديات",
+    "error": "تعذّر تحميل بيانات الموارد البشرية."
+  },
+  "admin": {
+    "title": "وحدة التكامل",
+    "subtitle": "مصفوفة اتصال Odoo API والسجلات",
+    "connections": "مصفوفة الاتصال",
+    "model": "النموذج",
+    "status": "الحالة",
+    "lastSync": "آخر مزامنة",
+    "records": "السجلات",
+    "logs": "سجلات التكامل",
+    "error": "تعذّر تحميل حالة التكامل.",
+    "statusValue": {
+      "connected": "متصل",
+      "degraded": "متدهور",
+      "error": "خطأ"
+    }
   }
 }
