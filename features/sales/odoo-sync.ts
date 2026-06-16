@@ -44,7 +44,8 @@ async function getUid(): Promise<number> {
   return uid;
 }
 
-function exec<T>(uid: number, model: string, method: string, args: unknown[], kwargs: Record<string, unknown> = {}) {
+async function exec<T>(model: string, method: string, args: unknown[], kwargs: Record<string, unknown> = {}) {
+  const uid = await getUid();
   return executeKw<T>(uid, ODOO_API_KEY, model, method, args, kwargs);
 }
 
@@ -68,7 +69,6 @@ function statusFromLead(description: string, stageName: string | false): RndStat
 /* --------------------------- ingestion ------------------------------- */
 
 export async function ingestIntakeToOdoo(intake: IntakeItem): Promise<IngestResult> {
-  const uid = await getUid();
   const phone = normalizePhone(intake.phone ?? intake.sender);
 
   // 1) Find an existing partner by phone or mobile (fuzzy on trailing digits).
@@ -112,7 +112,6 @@ export async function ingestIntakeToOdoo(intake: IntakeItem): Promise<IngestResu
 
 export async function fetchIntakeQueue(): Promise<IntakeItem[]> {
   try {
-    const uid = await getUid();
     const rows = await exec<
       Array<{
         id: number;
@@ -152,7 +151,6 @@ export async function fetchIntakeQueue(): Promise<IntakeItem[]> {
 export async function setIntakeParsing(leadId: number): Promise<boolean> {
   if (!Number.isFinite(leadId) || leadId <= 0) return false;
   try {
-    const uid = await getUid();
     const [lead] = await exec<Array<{ description: string | false }>>(
       'crm.lead',
       'read',
