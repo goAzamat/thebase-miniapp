@@ -150,7 +150,17 @@
     "ingredientDeficit": "Дефицит сырья",
     "assignTo": "Назначить",
     "optimizedLoad": "Оптим. загрузка",
-    "simulateBatch": "Симулировать партию"
+    "simulateBatch": "Симулировать партию",
+    "docBottlenecks": "Док-узкие места",
+    "rushOrders": "Срочные заказы",
+    "intakeBacklog": "Бэклог WhatsApp",
+    "dmsQueue": "Очередь DMS",
+    "dmsHint": "WhatsApp → Odoo приём",
+    "leadBuffer": "Буфер срока",
+    "daysShort": "д",
+    "parse": "Разобрать",
+    "class": { "b2b": "B2B Контракт", "b2c": "B2C Розница", "rush": "Срочный" },
+    "rnd": { "unparsed": "Не разобран", "parsing": "Разбор", "calculated": "Рассчитан", "quoted": "Котировка" }
   },
   "production": {
     "title": "Управление производством",

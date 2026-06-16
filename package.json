@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.62.0",
+    "@vercel/functions": "^1.5.1",
     "lucide-react": "^0.460.0",
     "next": "^15.1.3",
     "next-auth": "5.0.0-beta.25",

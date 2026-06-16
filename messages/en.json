@@ -150,7 +150,17 @@
     "ingredientDeficit": "Ingredient Deficit",
     "assignTo": "Assign to",
     "optimizedLoad": "Optimized load",
-    "simulateBatch": "Simulate Batch"
+    "simulateBatch": "Simulate Batch",
+    "docBottlenecks": "Doc bottlenecks",
+    "rushOrders": "Active rush orders",
+    "intakeBacklog": "WhatsApp backlog",
+    "dmsQueue": "DMS Intake Queue",
+    "dmsHint": "WhatsApp → Odoo ingestion",
+    "leadBuffer": "Lead buffer",
+    "daysShort": "d",
+    "parse": "Parse",
+    "class": { "b2b": "B2B Inbound", "b2c": "B2C Walk-in", "rush": "Rush Order" },
+    "rnd": { "unparsed": "Unparsed", "parsing": "Parsing", "calculated": "Calculated", "quoted": "Quoted" }
   },
   "production": {
     "title": "Production Control",

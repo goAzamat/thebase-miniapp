@@ -150,7 +150,17 @@
     "ingredientDeficit": "نقص المكوّنات",
     "assignTo": "تعيين إلى",
     "optimizedLoad": "حمل مُحسّن",
-    "simulateBatch": "محاكاة دفعة"
+    "simulateBatch": "محاكاة دفعة",
+    "docBottlenecks": "اختناقات المستندات",
+    "rushOrders": "طلبات عاجلة",
+    "intakeBacklog": "متراكم واتساب",
+    "dmsQueue": "قائمة DMS",
+    "dmsHint": "واتساب ← Odoo",
+    "leadBuffer": "هامش المهلة",
+    "daysShort": "ي",
+    "parse": "تحليل",
+    "class": { "b2b": "عقد B2B", "b2c": "تجزئة B2C", "rush": "عاجل" },
+    "rnd": { "unparsed": "غير محلّل", "parsing": "تحليل", "calculated": "محسوب", "quoted": "عرض سعر" }
   },
   "production": {
     "title": "التحكّم بالإنتاج",

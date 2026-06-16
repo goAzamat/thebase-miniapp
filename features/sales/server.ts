@@ -9,6 +9,7 @@
 import { unstable_cache } from 'next/cache';
 import { serviceSearchRead } from '@/lib/odoo/auth';
 import { getFulfillment } from '@/features/supply-chain/server';
+import { fetchIntakeQueue, setIntakeParsing } from './odoo-sync';
 import {
   mapLead,
   buildSalesIntel,
@@ -16,6 +17,7 @@ import {
   type RawLead,
   type Lead,
   type SalesIntel,
+  type IntakeItem,
 } from './schema';
 
 // Open opportunities only.
@@ -56,4 +58,16 @@ const fetchSalesIntelCached = unstable_cache(
 
 export async function getSalesIntel(): Promise<SalesIntel> {
   return fetchSalesIntelCached();
+}
+
+/* ----------------------- DMS LIVE INTAKE (WhatsApp) ----------------------- */
+
+// Thin Server Action wrappers around the Odoo ingestion pipeline so the client
+// (React Query) can read the live queue and shift statuses.
+export async function getIntakeQueue(): Promise<IntakeItem[]> {
+  return fetchIntakeQueue();
+}
+
+export async function markIntakeParsing(leadId: number): Promise<boolean> {
+  return setIntakeParsing(leadId);
 }
