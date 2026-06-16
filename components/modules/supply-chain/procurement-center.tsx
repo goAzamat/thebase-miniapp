@@ -24,6 +24,7 @@ import {
   Boxes,
 } from 'lucide-react';
 import { useProcurement, useCreatePR, useAdvanceRfq } from '@/features/procurement/queries';
+import { Toast } from '@/components/core/feedback/toast';
 import {
   buildRfqTemplate,
   DOC_KEYS,
@@ -50,14 +51,17 @@ const RFQ_STYLE: Record<RFQStatus, string> = {
 
 function ReorderLedger() {
   const t = useTranslations('procurement');
+  const tc = useTranslations('common');
   const { data } = useProcurement();
   const createPR = useCreatePR();
+  const [lockClient, setLockClient] = useState<string | null>(null);
   const rows = data?.reorderPoints ?? [];
   const reqs = data?.requisitions ?? [];
 
   const hasPR = (name: string) => reqs.some((r) => r.ingredientName === name);
 
   return (
+    <>
     <div className="overflow-x-auto rounded-xl border border-zinc-800">
       <table className="w-full border-collapse">
         <thead>
@@ -98,7 +102,12 @@ function ReorderLedger() {
                     <span className="text-[11px] text-zinc-500">{t('prPending')}</span>
                   ) : (
                     <button
-                      onClick={() => createPR.mutate({ ingredientName: r.ingredientName, requestedQtyKg: suggested, sku: r.sku })}
+                      onClick={() =>
+                        createPR.mutate(
+                          { ingredientName: r.ingredientName, requestedQtyKg: suggested, sku: r.sku },
+                          { onError: (e: unknown) => setLockClient((e as { client?: string })?.client ?? '') },
+                        )
+                      }
                       disabled={pending}
                       className="inline-flex items-center gap-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1 text-[10px] font-semibold text-amber-300 transition hover:bg-amber-500/20 disabled:opacity-50"
                     >
@@ -113,6 +122,14 @@ function ReorderLedger() {
         </tbody>
       </table>
     </div>
+    {lockClient && (
+      <Toast
+        title={tc('creditLockTitle')}
+        message={tc('creditLockMsg', { client: lockClient })}
+        onClose={() => setLockClient(null)}
+      />
+    )}
+    </>
   );
 }
 

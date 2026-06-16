@@ -1,7 +1,9 @@
 {
   "common": {
     "appName": "THE BASE",
-    "tagline": "Beverage Operating System"
+    "tagline": "Beverage Operating System",
+    "creditLockTitle": "Credit Lock — Operation Blocked",
+    "creditLockMsg": "New operations are restricted for {client}: balance is 100+ days overdue."
   },
   "auth": {
     "title": "Welcome back",
@@ -175,7 +177,18 @@
     "mixing": "Mixing",
     "bottling": "Bottling",
     "qc": "QC",
-    "ready": "Ready"
+    "ready": "Ready",
+    "floorTitle": "Factory Floor Monitor",
+    "start": "Start",
+    "units": "units",
+    "expand": "Yield variance audit",
+    "collapse": "Hide audit",
+    "loss": "Total loss",
+    "noVariance": "No consumption reported yet.",
+    "facility": { "dubai": "Dubai · Al Quoz Plant", "ajman": "Ajman Plant" },
+    "stage": { "queued": "Queued", "mixing": "Mixing", "bottling": "Bottling", "qa_check": "QA Validation", "ready": "Released" },
+    "qa": { "hold": "QA Hold", "released": "Released to Logistics", "check": "QA Check" },
+    "matrix": { "ingredient": "Ingredient", "theoretical": "Theoretical Qty (kg)", "actual": "Actual Qty (kg)", "variance": "Variance %", "costImpact": "Cost Impact AED" }
   },
   "finance": {
     "title": "Executive Control Tower",
@@ -188,6 +201,27 @@
     "runway": "Runway",
     "months": "mo",
     "workingCapital": "Working capital",
+    "copqTitle": "Cost of Losses & Poor Quality (COPQ) Audit",
+    "sunkCapital": "Sunk Capital (cancelled post-production)",
+    "sunkHint": "Audited 10–20% post-start cancellation drop",
+    "holdingCost": "Dead-stock Holding Cost",
+    "panicPremium": "Panic Rush-Purchase Premium",
+    "copqScrap": "Scrap / Rework (COPQ)",
+    "sugarIncident": "Sugar Contamination Incident — Recovery",
+    "copqOfRevenue": "COPQ % of revenue",
+    "target": "Target",
+    "totalLeak": "Total leak",
+    "arTitle": "Accounts Receivable — Credit Risk Lock",
+    "systemLockMsg": "New manufacturing operations are restricted for clients past 100 days:",
+    "bucket": { "current": "Current", "d31_60": "31–60 days", "d61_90": "61–90 days", "d100plus": "100+ Days" },
+    "projectsTitle": "CEO Project Governance",
+    "governanceKpi": "Owner + milestone",
+    "project": "Initiative",
+    "owner": "Owner",
+    "milestone": "Milestone",
+    "status": "Status",
+    "budget": "Budget AED",
+    "projStatus": { "on_track": "On track", "at_risk": "At risk", "blocked": "Blocked" },
     "error": "Could not load financials."
   },
   "hr": {

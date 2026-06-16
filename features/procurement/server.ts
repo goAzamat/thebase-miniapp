@@ -16,10 +16,11 @@ import {
   buildProcurement,
   computeReorder,
   type ProcurementData,
-  type PurchaseRequisition,
   type RFQStatus,
+  type CreatePrResult,
 } from './schema';
 import { fetchLiveOdooStocks, stockByCode, createOdooPurchaseOrder } from './odoo-stock';
+import { isCreditLocked } from '@/features/finance/schema';
 
 const tick = () => new Promise<void>((r) => setTimeout(r, 80));
 
@@ -53,7 +54,14 @@ export async function createPurchaseRequisition(input: {
   ingredientName: string;
   requestedQtyKg: number;
   sku?: string;
-}): Promise<PurchaseRequisition> {
+  clientName?: string;
+}): Promise<CreatePrResult> {
+  // Cross-module credit gate — abort BEFORE any Odoo write if the linked
+  // client is past 100 days (System Lock).
+  if (input.clientName && isCreditLocked(input.clientName)) {
+    return { success: false, error: 'CREDIT_LOCK_VIOLATION', client: input.clientName };
+  }
+
   let odooId: number | null = null;
   try {
     odooId = await createOdooPurchaseOrder(input);
@@ -62,12 +70,15 @@ export async function createPurchaseRequisition(input: {
   }
 
   return {
-    id: odooId ? `PO-${odooId}` : `PO-${Date.now()}`,
-    ingredientName: input.ingredientName,
-    requestedQtyKg: input.requestedQtyKg,
-    status: 'draft',
-    createdAt: new Date().toISOString(),
-    odooId: odooId ?? undefined,
+    success: true,
+    pr: {
+      id: odooId ? `PO-${odooId}` : `PO-${Date.now()}`,
+      ingredientName: input.ingredientName,
+      requestedQtyKg: input.requestedQtyKg,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      odooId: odooId ?? undefined,
+    },
   };
 }
 

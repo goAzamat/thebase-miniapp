@@ -1,20 +1,21 @@
 /**
  * app/[locale]/(dashboard)/production/page.tsx
- * Live batches + Yield Variance, plus the predictive demand-vs-capacity header.
+ * -------------------------------------------------------------
+ * Manufacturing Operations & QA — live batch + yield variance monitor.
+ * RSC prefetch (mrp.production overlay with silent fallback) + hydration.
  */
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { getProductionBatches, getPipelineMetrics } from '@/features/shared/server';
-import { sharedKeys } from '@/features/shared/queries';
-import { ProductionBoard } from '@/components/modules/production/production-board';
+import { getProductionData } from '@/features/production/server';
+import { productionKeys } from '@/features/production/queries';
+import { ManufacturingMatrix } from '@/components/modules/production/manufacturing-matrix';
 
 export default async function ProductionPage() {
-  const qc = new QueryClient();
-  await qc.prefetchQuery({ queryKey: sharedKeys.production(), queryFn: getProductionBatches });
-  await qc.prefetchQuery({ queryKey: sharedKeys.pipeline(), queryFn: getPipelineMetrics });
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({ queryKey: productionKeys.data(), queryFn: getProductionData });
 
   return (
-    <HydrationBoundary state={dehydrate(qc)}>
-      <ProductionBoard />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ManufacturingMatrix />
     </HydrationBoundary>
   );
 }

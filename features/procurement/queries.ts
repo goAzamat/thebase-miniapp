@@ -25,8 +25,16 @@ export function useProcurement() {
 export function useCreatePR() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (input: { ingredientName: string; requestedQtyKg: number; sku?: string }) =>
-      createPurchaseRequisition(input),
+    mutationFn: async (input: { ingredientName: string; requestedQtyKg: number; sku?: string; clientName?: string }) => {
+      const res = await createPurchaseRequisition(input);
+      if (!res.success) {
+        throw Object.assign(new Error('CREDIT_LOCK_VIOLATION'), {
+          code: 'CREDIT_LOCK_VIOLATION',
+          client: res.client,
+        });
+      }
+      return res.pr;
+    },
     onMutate: async (input) => {
       await qc.cancelQueries({ queryKey: procurementKeys.data() });
       const prev = qc.getQueryData<ProcurementData>(procurementKeys.data());

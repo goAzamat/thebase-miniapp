@@ -234,3 +234,13 @@ export function buildProcurement(): ProcurementData {
 
 /** Distinct supplier + ingredient lists for the RFQ generator selects. */
 export const RFQ_SUPPLIERS = ['Givaudan', 'BHF Ingredients', 'Mane', 'Olam', 'Silesia', 'Symrise', 'Firmenich'];
+
+/* ------------------- Credit-gate result contract --------------------- */
+
+export interface CreditLockViolation {
+  success: false;
+  error: 'CREDIT_LOCK_VIOLATION';
+  client: string;
+}
+
+export type CreatePrResult = { success: true; pr: PurchaseRequisition } | CreditLockViolation;
