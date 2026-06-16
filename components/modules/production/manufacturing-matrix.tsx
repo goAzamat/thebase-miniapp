@@ -153,7 +153,9 @@ function VarianceMatrix({ batch }: { batch: ProductionBatch }) {
 
 /* ------------------------------ Batch card --------------------------- */
 
-function BatchCard({ batch, onLock }: { batch: ProductionBatch; onLock: (client: string) => void }) {
+type GateInfo = { kind: 'credit' | 'haccp'; subject: string };
+
+function BatchCard({ batch, onGate }: { batch: ProductionBatch; onGate: (g: GateInfo) => void }) {
   const t = useTranslations('production');
   const start = useStartBatch();
   const [open, setOpen] = useState(false);
@@ -196,7 +198,16 @@ function BatchCard({ batch, onLock }: { batch: ProductionBatch; onLock: (client:
                 onClick={() =>
                   start.mutate(
                     { id: batch.id },
-                    { onError: (e: unknown) => onLock((e as { client?: string })?.client ?? batch.clientName) },
+                    {
+                      onError: (e: unknown) => {
+                        const err = e as { code?: string; client?: string; operatorName?: string };
+                        if (err.code === 'HACCP_COMPLIANCE_VIOLATION') {
+                          onGate({ kind: 'haccp', subject: err.operatorName ?? '' });
+                        } else {
+                          onGate({ kind: 'credit', subject: err.client ?? batch.clientName });
+                        }
+                      },
+                    },
                   )
                 }
                 disabled={start.isPending}
@@ -230,7 +241,7 @@ export function ManufacturingMatrix() {
   const t = useTranslations('production');
   const tc = useTranslations('common');
   const { data, isPending, isError } = useProductionData();
-  const [lockClient, setLockClient] = useState<string | null>(null);
+  const [gate, setGate] = useState<GateInfo | null>(null);
 
   if (isError) {
     return (
@@ -275,7 +286,7 @@ export function ManufacturingMatrix() {
               </div>
               <div className="space-y-3">
                 {batches.map((b) => (
-                  <BatchCard key={b.id} batch={b} onLock={setLockClient} />
+                  <BatchCard key={b.id} batch={b} onGate={setGate} />
                 ))}
               </div>
             </div>
@@ -283,11 +294,15 @@ export function ManufacturingMatrix() {
         })}
       </div>
 
-      {lockClient && (
+      {gate && (
         <Toast
-          title={tc('creditLockTitle')}
-          message={tc('creditLockMsg', { client: lockClient })}
-          onClose={() => setLockClient(null)}
+          title={gate.kind === 'haccp' ? tc('haccpLockTitle') : tc('creditLockTitle')}
+          message={
+            gate.kind === 'haccp'
+              ? tc('haccpLockMsg', { name: gate.subject })
+              : tc('creditLockMsg', { client: gate.subject })
+          }
+          onClose={() => setGate(null)}
         />
       )}
     </section>

@@ -197,6 +197,22 @@ const SEED_BATCHES: ProductionBatch[] = [
       ['Extra Fine Sugar', 512, 515, 5.24],
     ]),
   },
+  {
+    // Buyer is NOT credit-locked, but the assigned operator's sanitary card is
+    // expired → demonstrates the HACCP gate (second rule) on batch start.
+    id: 'MO-5528',
+    salesOrderId: 'SO-24820',
+    clientName: 'Half Million',
+    formulaSku: 'CL-001',
+    formulaName: 'Karak Chai',
+    targetYieldUnits: 1000,
+    actualYieldUnits: 0,
+    status: 'queued',
+    facilityId: 'ajman',
+    startedAt: '2026-06-17T06:00:00Z',
+    qaCleared: false,
+    variance: [],
+  },
 ];
 
 export function buildProduction(): ProductionData {

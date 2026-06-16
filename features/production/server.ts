@@ -9,6 +9,7 @@
 import { buildProduction, mapMrpState, type ProductionData } from './schema';
 import { fetchMrpProductions } from './odoo-mrp';
 import { isCreditLocked } from '@/features/finance/schema';
+import { operatorForBatch, healthForEmployee, isHealthCritical } from '@/features/hr/schema';
 
 export async function getProductionData(): Promise<ProductionData> {
   const base = buildProduction();
@@ -40,18 +41,32 @@ export async function getProductionData(): Promise<ProductionData> {
 
 export type BatchStartResult =
   | { success: true; batchId: string; status: 'mixing' }
-  | { success: false; error: 'CREDIT_LOCK_VIOLATION'; client: string };
+  | { success: false; error: 'CREDIT_LOCK_VIOLATION'; client: string }
+  | { success: false; error: 'HACCP_COMPLIANCE_VIOLATION'; operatorName: string };
 
 /**
- * Initialize a batch (Queued → Mixing). CROSS-MODULE GATE: if the buyer is
- * credit-locked (100+ days), abort before any Odoo state change.
+ * Initialize a batch (Queued → Mixing). DOUBLE-GATED before any Odoo state
+ * change:
+ *   Gate 1 — Finance: buyer must not be credit-locked (100+ days).
+ *   Gate 2 — HR/HACCP: the assigned operator's sanitary card must be valid
+ *            (not expired and ≥ 7 days to renewal).
  */
 export async function startBatch(batchId: string): Promise<BatchStartResult> {
   const batch = buildProduction().batches.find((b) => b.id === batchId);
   const client = batch?.clientName ?? '';
 
+  // Gate 1 — credit compliance.
   if (isCreditLocked(client)) {
     return { success: false, error: 'CREDIT_LOCK_VIOLATION', client };
+  }
+
+  // Gate 2 — HACCP sanitary clearance of the assigned operator.
+  const operator = operatorForBatch(batchId);
+  if (operator) {
+    const health = healthForEmployee(operator.name);
+    if (health && isHealthCritical(health)) {
+      return { success: false, error: 'HACCP_COMPLIANCE_VIOLATION', operatorName: operator.name };
+    }
   }
 
   // TODO(odoo): mrp.production button_plan / write state → 'progress'.

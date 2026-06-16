@@ -27,10 +27,10 @@ export function useStartBatch() {
     mutationFn: async (batch: { id: string }) => {
       const r = await startBatch(batch.id);
       if (!r.success) {
-        throw Object.assign(new Error('CREDIT_LOCK_VIOLATION'), {
-          code: 'CREDIT_LOCK_VIOLATION',
-          client: r.client,
-        });
+        if (r.error === 'CREDIT_LOCK_VIOLATION') {
+          throw Object.assign(new Error(r.error), { code: r.error, client: r.client });
+        }
+        throw Object.assign(new Error(r.error), { code: r.error, operatorName: r.operatorName });
       }
       return r;
     },
